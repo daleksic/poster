@@ -1,4 +1,7 @@
 /* Empty. Add your own CSS if you like */
+input{
+  border: none;
+}
 .block-inline {
   display:inline-block;
   position: relative;
@@ -61,7 +64,7 @@
   opacity: 0.8;
 }
 .bottom{
-  bottom: 0px;
+  bottom: 0;
 }
 .album-selected{
   background-color: #1a8cab;
@@ -72,6 +75,47 @@
   background-color: #353535;
   color: white;
   opacity: 0.8;
+}
+.pull-right{
+  float: right;
+}
+.pull-left{
+  float: left;
+}
+
+.tooltip{
+  box-sizing: border-box;
+  z-index: 200;
+  right: 0;
+  float: right;
+  border-radius: 0;
+  width: 50%;
+  height: auto;
+  background: #FF3230;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+}
+.tooltip:after
+{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 0 8px 18px;
+  border-color: #FF3230 transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  top: -18px;
+  left: auto;
+  right: 9px;
+  float: right;
+}
+
+.top-48{
+  top: 48px;
+}
+.top--48{
+  top: -20px;
 }
 
 @media (min-width: 200px) and (max-width: 400px) {
