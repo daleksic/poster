@@ -1,10 +1,8 @@
-angular.module('starter.albums', [])
+angular.module('starter.albumdetail', [])
 
-.controller('AlbumsCtrl', function($scope, $state) {
+.controller('AlbumDetailCtrl', function($scope) {
 
-  $scope.selectedAlbum = '';
-
-  $scope.albums = [
+  $scope.images = [
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 3 },
@@ -12,13 +10,5 @@ angular.module('starter.albums', [])
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 5 }
 
   ];
-
-  $scope.onHold = function(id){
-    $scope.selectedAlbum = id;
-  };
-  $scope.goToAlbum = function(id){
-    $state.go('app.albums.detail', {albumId: id});
-  
-  };
 
 });

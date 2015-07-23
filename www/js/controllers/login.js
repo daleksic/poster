@@ -1,6 +1,6 @@
 angular.module('starter.login', [])
 
-.controller('LoginCtrl', function($scope, $ionicPopover) {
+.controller('LoginCtrl', function($scope, $ionicPopover, $state) {
   $scope.errorMessage = "";
   $scope.user = {
     email:"",
@@ -8,7 +8,9 @@ angular.module('starter.login', [])
   };
 
   $scope.login = function() {
-    alert($scope.user.email);
+    if(true){
+      $state.go('app.albums');
+    }
   };
 
 

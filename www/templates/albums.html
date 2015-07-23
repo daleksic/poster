@@ -1,5 +1,17 @@
 <ion-view view-title="Albums">
   <ion-content>
-    
+
+  <!--  <album-item ng-repeat="album in albums" album-id="{{album.id}}" album-title="{{album.title}}" album-image="{{album.image}}"> </album-item>
+-->
+    <div class="block-inline width-33"  ng-repeat="album in albums" on-hold="onHold(album.id)">
+      <div class="block width-100 color-silver">
+        <a ui-sref="app.albumDetail({ albumId: album.id })"><img class="block image" ng-src="{{album.image}}"></a>
+        <div id="album-{{album.id}}" class="block-absolute bottom width-100 padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 text-center" ng-class="{albumSelected: selectedAlbum == album.id, albumDeselected: selectedAlbum != album.id}">
+          <a class="text-underline-none text-color-white" ui-sref="app.albumDetail({ albumId: album.id })">{{album.title}}</a>
+        </div>
+      </div>
+    </div>
+
+
   </ion-content>
 </ion-view>

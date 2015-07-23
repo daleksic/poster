@@ -2,31 +2,34 @@ angular.module('starter.albums.albumitem', [])
 
 .controller('AlbumItemCtrl',['$scope', '$timeout', function($scope, $timeout) {
 
+  $scope.albumId = '';
   $scope.albumTitle = '';
   $scope.albumImage = '';
 
   $scope.albumtitlestyle = "album-deselected";
 
-  $scope.onHold = function(){
+  $scope.onHold = function(id){
     $scope.albumtitlestyle = "album-selected";
+    $scope.selectedAlbum = id;
   };
 
 }])
 
 .directive('albumItem', function() {
   return {
-  //  scope: {},
+//    scope: {},
     restrict: 'E',
     replace: 'true',
-    template: '<div class="block-inline width-33" on-hold="onHold()" ng-controller="AlbumItemCtrl">'+
+    template: '<div class="block-inline width-33" on-hold="onHold(albumId)" ng-controller="AlbumItemCtrl">'+
                      '<div class="block width-100 color-silver">'+
-                          '<img class="block image" ng-src="{{albumImage}}">'+
+                          '<a ng-href=""><img class="block image" ng-src="{{albumImage}}"></a>'+
                           '<div class="block-absolute bottom width-100 padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 text-center" ng-class="albumtitlestyle">'+
-                            '{{albumTitle}}'+
+                            '<a ng-href="">{{albumTitle}}</a>'+
                           '</div>'+
                      '</div>'+
               '</div>',
     link: function(scope, elem, attrs) {
+      var albumId= attrs.albumId;
       var albumTitle = attrs.albumTitle;
       var albumImage = attrs.albumImage;
 
@@ -41,6 +44,11 @@ angular.module('starter.albums.albumitem', [])
         scope.albumImage = albumImage;
 
       }
+      if((albumId !== null) && (albumId !== undefined) && (albumId!== '')){
+
+        scope.albumId = albumId;
+
+      }
 
 
       elem.bind('click', function() {
@@ -53,6 +61,13 @@ angular.module('starter.albums.albumitem', [])
         elem.css('cursor', 'pointer');
       });
     }
+  };
+})
+.directive('albumId', function(){
+
+  return {
+    restrict: 'A',
+
   };
 })
 .directive('albumTitle', function(){
