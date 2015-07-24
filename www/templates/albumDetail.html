@@ -1,13 +1,13 @@
 <ion-view view-title="Album detail">
   <ion-content>
-    <div class="block width-100 positive-bg padding-left-30 padding-right-30 padding-top-15 padding-bottom-15">
+    <div class="block width-100 positive-bg padding-left-30 padding-right-30 padding-top-5 padding-bottom-5">
       <h4 class="text-center text-color-white">Danger room</h4>
       <p class="text-center text-color-white">Danger room description Danger room description</p>
     </div>
 
     <div class="block-inline width-33"  ng-repeat="image in images" on-hold="onHold(image.id)">
       <div class="block width-100 color-silver">
-        <a ui-sref="app.albumDetail({ albumId: image.id })"><img class="block image" ng-src="{{image.image}}"></a>
+        <a ui-sref="app.imageDetail({ albumId: 1, imageId: image.id})"><img class="block image" ng-src="{{image.image}}"></a>
       </div>
     </div>
   </ion-content>
