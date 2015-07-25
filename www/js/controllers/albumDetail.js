@@ -2,6 +2,8 @@ angular.module('starter.albumdetail', [])
 
 .controller('AlbumDetailCtrl', function($scope) {
 
+  $scope.selectedImage = '';
+
   $scope.images = [
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
@@ -10,5 +12,9 @@ angular.module('starter.albumdetail', [])
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 5 }
 
   ];
+
+  $scope.onHold = function(id){
+    $scope.selectedImage = id;
+  };
 
 });

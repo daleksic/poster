@@ -13,16 +13,16 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
+    <ion-header-bar class="bar-light">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
-    <ion-content> <!-- here goes class for background -->
-      <ion-list>
-        <ion-item menu-close href="#/app/albums">
-          <i class="ion-grid"> &nbsp; </i> Albums
+    <ion-content class="light-bg"> <!-- here goes class for background -->
+      <ion-list >
+        <ion-item menu-close  ui-sref="app.albums()">
+          <i class="ion-grid font-size-17"> &nbsp; </i><span style="position: relative; top: -3px;">Albums</span>
         </ion-item>
-        <ion-item menu-close href="#/app/settings">
-          <i class="ion-android-settings"> &nbsp; </i> Settings
+        <ion-item menu-close  ui-sref="app.settings()">
+          <i class="ion-android-settings font-size-17"> &nbsp; </i> <span style="position: relative; top: -3px;">Settings</span>
         </ion-item>
       </ion-list>
     </ion-content>
