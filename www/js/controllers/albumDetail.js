@@ -1,6 +1,6 @@
 angular.module('starter.albumdetail', [])
 
-.controller('AlbumDetailCtrl', function($scope) {
+.controller('AlbumDetailCtrl', function($scope, $ionicActionSheet) {
 
   $scope.selectedImage = '';
 
@@ -15,6 +15,33 @@ angular.module('starter.albumdetail', [])
 
   $scope.onHold = function(id){
     $scope.selectedImage = id;
+    $scope.showActionSheet();
+  };
+
+  $scope.showActionSheet = function() {
+
+    // Show the action sheet
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+      { text: '<b>Edit</b>' }
+      ],
+      destructiveText: 'Delete',
+      titleText: 'Modify your photo',
+      cancelText: 'Cancel',
+      cancel: function() {
+        // add cancel code..
+      },
+      buttonClicked: function(index) {
+        if(index == 0){
+          alert("Edit");
+        }
+        return true;
+      },
+      destructiveButtonClicked : function(){
+        alert("Delete");
+      }
+    });
+
   };
 
 });

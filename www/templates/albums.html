@@ -1,8 +1,12 @@
-<ion-view view-title="Albums">
+<ion-view view-title="Albums" >
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" on-touch="openModalmodalAddAlbum()">
+      <i class="icon ion-android-add"></i>
+    </button>
+  </ion-nav-buttons>
+
   <ion-content>
 
-  <!--  <album-item ng-repeat="album in albums" album-id="{{album.id}}" album-title="{{album.title}}" album-image="{{album.image}}"> </album-item>
--->
     <div class="block-inline width-33"  ng-repeat="album in albums" on-hold="onHold(album.id)">
       <div class="block width-100 color-silver">
         <a ui-sref="app.albumDetail({ albumId: album.id })"><img class="block image" ng-src="{{album.image}}"></a>
@@ -11,7 +15,6 @@
         </div>
       </div>
     </div>
-
 
   </ion-content>
 </ion-view>

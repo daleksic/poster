@@ -1,8 +1,14 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($scope, $state) {
+.controller('AlbumsCtrl', function($scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover) {
 
   $scope.selectedAlbum = '';
+  $scope.errorMessage = "";
+
+  $scope.album = {
+    title:'',
+    description:''
+  }
 
   $scope.albums = [
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
@@ -15,10 +21,95 @@ angular.module('starter.albums', [])
 
   $scope.onHold = function(id){
     $scope.selectedAlbum = id;
+    $scope.showActionSheet();
   };
   $scope.goToAlbum = function(id){
     $state.go('app.albums.detail', {albumId: id});
-  
+
   };
+
+  $scope.showActionSheet = function() {
+
+    // Show the action sheet
+    var hideSheet = $ionicActionSheet.show({
+      buttons: [
+      { text: '<b>Edit</b>' }
+      ],
+      destructiveText: 'Delete',
+      titleText: 'Modify your album',
+      cancelText: 'Cancel',
+      cancel: function() {
+        // add cancel code..
+      },
+      buttonClicked: function(index) {
+        if(index == 0){
+          $scope.openModalmodalAddAlbum();
+        }
+        return true;
+      },
+      destructiveButtonClicked : function(){
+        alert("Delete");
+      }
+    });
+
+  };
+
+
+
+  $ionicModal.fromTemplateUrl('../../templates/modal/addAlbum.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modalAddAlbum = modal;
+  });
+  $scope.openModalmodalAddAlbum = function() {
+    $scope.modalAddAlbum.show();
+  };
+  $scope.closeModalAddAlbum = function() {
+    $scope.modalAddAlbum.hide();
+  };
+
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modalAddAlbum.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+
+
+  $ionicPopover.fromTemplateUrl('../../templates/popover/input_popover.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.openPopover = function($event, message) {
+    $scope.popover.show($event);
+    $scope.errorMessage = message;
+  };
+
+  $scope.closePopover = function() {
+    $scope.popover.hide();
+  };
+
+  //Cleanup the popover when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.popover.remove();
+  });
+  // Execute action on hide popover
+  $scope.$on('popover.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove popover
+  $scope.$on('popover.removed', function() {
+    // Execute action
+  });
+
 
 });

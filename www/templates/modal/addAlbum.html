@@ -1,0 +1,30 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Add album</h1>
+  </ion-header-bar>
+  <ion-content class="padding-left padding-right">
+    <div class="list">
+      <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Title is not valid!')">
+        <input type="text" placeholder="Title" ng-model="album.title">
+        <div >
+          <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+        </div>
+
+      </div>
+
+      <div class="item item-input" style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Description is not valid')">
+        <input type="text" placeholder="Description" ng-model="title.description" >
+        <div  >
+          <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+        </div>
+      </div>
+  </div>
+
+    <div class="button-bar  margin-top-50">
+      <button class="button button-stable" on-touch="closeModalAddAlbum()">Cancel</button>
+      <button class="button button-positive"  on-touch="closeModalAddAlbum()">OK</button>
+    </div>
+
+
+  </ion-content>
+</ion-modal-view>
