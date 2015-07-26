@@ -152,12 +152,12 @@ input{
   content: '';
   position: absolute;
   border-style: solid;
-  border-width: 0 8px 18px;
+  border-width: 0 8px 12px;
   border-color: #FF3230 transparent;
   display: block;
   width: 0;
   z-index: 1;
-  top: -18px;
+  top: -12px;
   left: auto;
   right: 9px;
   float: right;

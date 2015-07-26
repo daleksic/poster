@@ -8,34 +8,35 @@
     <form>
       <div class="list">
 
-        <div class="item item-input " style="overflow: inherit; z-index: 90;" on-touch="openPopover($event, 'Email is not valid')">
+        <div class="item item-input " style="overflow: inherit; z-index: 90;" on-touch="openPopover($event, 'Full name is not valid')">
+          <input type="text" placeholder="Full name" ng-model="user.fullName">
+          <div >
+            <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+          </div>
+        </div>
+
+        <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Email is not valid')">
           <input type="text" placeholder="Email" ng-model="user.email">
           <div >
             <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
           </div>
-<!--
-          <div class="tooltip padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 top-48 color-silver">
-            Password is not good
-          </div>
--->
         </div>
 
         <div class="item item-input" style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Password must be 8 characters!')">
           <input type="text" placeholder="Password" ng-model="user.password" >
-          <div  >
+          <div>
             <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
           </div>
-
         </div>
 
       </div>
-      <button nav-transition="android" on-touch="login()" class="button button-block button-outline button-light" style="margin-top: 20px;">
-        Sign in
+      <button nav-transition="android" on-touch="register()" class="button button-block button-outline button-light" style="margin-top: 20px;">
+        Sign up
       </button>
-
       <center style=" margin-top: 20px;">
-        <a class="light" ui-sref="register()">Sign up to Poster</a>
+        <a class="light" ui-sref="login()">Sign in to Poster</a>
       </center>
-    </form>
-  </ion-content>
+
+</form>
+</ion-content>
 </ion-view>
