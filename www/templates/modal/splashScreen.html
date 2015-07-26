@@ -1,0 +1,21 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-positive">
+    <h1 class="title">Set splash screen length </h1>
+  </ion-header-bar>
+  <ion-content>
+
+    <center class="padding-top-30"><h3>{{splashScreenLength}}s</h3></center>
+    <div class="range range-positive">
+      <i >1s</i>
+      <input type="range" name="length" min="1" max="20" ng-model="splashScreenLength" ng-change="dragRangeSplash(splashScreenLength)">
+      <i >20s</i>
+    </div>
+
+    <div class="button-bar padding-left-5 padding-right-5 margin-top-50">
+      <button class="button button-stable" on-touch="closeModalSplash()">Cancel</button>
+      <button class="button button-positive"  on-touch="closeModalSplash()">OK</button>
+    </div>
+
+
+  </ion-content>
+</ion-modal-view>
