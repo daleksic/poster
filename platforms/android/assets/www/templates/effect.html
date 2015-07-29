@@ -1,0 +1,34 @@
+<ion-view view-title="Effect" >
+  <ion-content class="fill  dark-bg">
+
+   <div id="container" class="block overflow-hidden" ng-style="{height: {{height}} + 'px'}">
+
+     <div class="block fill dark-bg overflow-hidden">
+       <img ng-src="https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fforums.androidcentral.com%2Fattachments%2Fhtc-one-m8%2F109689d1395935114t-share-your-htc-one-m8-screenshots-setup-screenshot_2014-03-27-11-41-29.png&f=1" class="block image"/>
+     </div>
+     <div class="block-absolute-2 width-100 dark-bg padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 bottom-44 text-color-white text-center">
+
+         <ion-scroll direction="x" style="width: auto; height: 100%;">
+           <div class=" block" style="width: 252%;">
+             <div class="block-inline width-40-height-40 " ng-repeat="color in colors" style="background-color: #{{color.hashcode}}" on-touch="selectColor(color.name)">
+               <i class="icon ion-android-locate font-size-17 top-15 position-relative" ng-show="selectedColor == color.name"></i>
+             </div>
+         </div>
+         </ion-scroll>
+
+      </div>
+
+      <div class="bar bar-footer bar-positive">
+        <button class="button button-clear">
+          <i class="icon ion-wand"></i>
+        </button>
+
+        <button class="button button-clear">
+          <i class="icon ion-android-done"></i>
+        </button>
+      </div>
+
+
+    </div>
+  </ion-content>
+</ion-view>
