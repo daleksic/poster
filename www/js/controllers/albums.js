@@ -33,9 +33,9 @@ angular.module('starter.albums', [])
     // Show the action sheet
     var hideSheet = $ionicActionSheet.show({
       buttons: [
-      { text: '<b>Edit</b>' }
+      { text: '<i class="icon ion-edit"></i><b >Edit</b>' }
       ],
-      destructiveText: 'Delete',
+      destructiveText: '<i class="icon ion-android-delete"></i> <b >Delete</b>',
       titleText: 'Modify your album',
       cancelText: 'Cancel',
       cancel: function() {
@@ -56,13 +56,14 @@ angular.module('starter.albums', [])
 
 
 
-  $ionicModal.fromTemplateUrl('../../templates/modal/addAlbum.html', {
+  $ionicModal.fromTemplateUrl('templates/modal/addAlbum.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.modalAddAlbum = modal;
   });
   $scope.openModalmodalAddAlbum = function() {
+    //alert('Add album');
     $scope.modalAddAlbum.show();
   };
   $scope.closeModalAddAlbum = function() {
@@ -83,7 +84,7 @@ angular.module('starter.albums', [])
   });
 
 
-  $ionicPopover.fromTemplateUrl('../../templates/popover/input_popover.html', {
+  $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;

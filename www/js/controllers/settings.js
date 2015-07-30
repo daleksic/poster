@@ -13,7 +13,7 @@ angular.module('starter.settings', [])
     $scope.splashScreenLength = value;
   };
 
-  $ionicModal.fromTemplateUrl('../../templates/modal/theme.html', {
+  $ionicModal.fromTemplateUrl('templates/modal/theme.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
@@ -27,7 +27,7 @@ angular.module('starter.settings', [])
   };
 
 
-  $ionicModal.fromTemplateUrl('../../templates/modal/splashScreen.html', {
+  $ionicModal.fromTemplateUrl('templates/modal/splashScreen.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
@@ -41,7 +41,7 @@ angular.module('starter.settings', [])
   };
 
 
-  $ionicModal.fromTemplateUrl('../../templates/modal/syncData.html', {
+  $ionicModal.fromTemplateUrl('templates/modal/syncData.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {

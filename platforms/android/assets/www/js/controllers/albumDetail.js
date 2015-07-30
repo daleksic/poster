@@ -23,9 +23,9 @@ angular.module('starter.albumdetail', [])
     // Show the action sheet
     var hideSheet = $ionicActionSheet.show({
       buttons: [
-      { text: '<b>Edit</b>' }
+      { text: '<i class="icon ion-edit"></i> <b>Edit</b>' }
       ],
-      destructiveText: 'Delete',
+      destructiveText: '<i class="icon ion-android-delete"></i> <b>Delete</b>',
       titleText: 'Modify your photo',
       cancelText: 'Cancel',
       cancel: function() {

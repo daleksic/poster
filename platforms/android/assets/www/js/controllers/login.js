@@ -15,7 +15,7 @@ angular.module('starter.login', [])
 
 
 
-  $ionicPopover.fromTemplateUrl('../../templates/popover/input_popover.html', {
+  $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
