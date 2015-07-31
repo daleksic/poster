@@ -54,8 +54,6 @@ angular.module('starter.albums', [])
 
   };
 
-
-
   $ionicModal.fromTemplateUrl('templates/modal/addAlbum.html', {
     scope: $scope,
     animation: 'slide-in-up'
