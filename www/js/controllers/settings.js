@@ -1,8 +1,8 @@
 angular.module('starter.settings', [])
 
-.controller('SettingsCtrl', function($scope, $ionicModal) {
+.controller('SettingsCtrl', function($scope, $ionicModal,  UtilsService) {
 
-  $scope.splashScreenLength = 1;
+  $scope.splashScreenLength = 3;
   $scope.syncDataTime = 15;
 
   $scope.dragRangeSyncDataTime = function(value) {
@@ -34,10 +34,31 @@ angular.module('starter.settings', [])
     $scope.modalSplash = modal;
   });
   $scope.openModalSplash = function() {
-    $scope.modalSplash.show();
+    console.log('splash open');
+
+    UtilsService.get('PosterSplashScreenDelay').then(function(value){
+
+      console.log('Settings splashScreenDelay: ' + value);
+      var delay = 3000;
+      if(value != undefined){
+        delay =  value;
+      }
+      $scope.splashScreenLength = delay/1000;
+      $scope.modalSplash.show();
+
+    });
+
+
   };
   $scope.closeModalSplash = function() {
     $scope.modalSplash.hide();
+  };
+
+  $scope.saveSplashScreenPreference = function () {
+    console.log('splash ok');
+    UtilsService.set('PosterSplashScreenDelay', $scope.splashScreenLength*1000);
+    $scope.modalSplash.hide();
+
   };
 
 

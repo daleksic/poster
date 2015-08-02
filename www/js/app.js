@@ -3,9 +3,10 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'starter.login', 'starter.register', 'starter.albums', 'starter.albumdetail', 'starter.imagedetail','starter.settings', 'starter.effect'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.register', 'starter.albums', 'starter.albumdetail', 'starter.imagedetail','starter.settings', 'starter.effect', 'starter.utils'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaSplashscreen, UtilsService) {
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -15,6 +16,27 @@ angular.module('starter', ['ionic', 'starter.login', 'starter.register', 'starte
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+    var now = new Date().getTime();
+    console.log("Time start: " + now);
+    UtilsService.get('PosterSplashScreenDelay').then(function(value){
+
+      var delay = 3000;
+      if(value != undefined){
+        delay =  value;
+      }
+      var now2 = new Date().getTime();
+      var res = now2 - now;
+
+      setTimeout(function() {
+        $cordovaSplashscreen.hide();
+      }, delay - res);
+      
+      console.log("Time finish: " + now);
+      console.log("Time pass: " + res);
+      console.log("AppJS delay: " + value);
+
+    });
+
   });
 })
 
