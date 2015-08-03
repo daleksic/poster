@@ -1,11 +1,11 @@
-<ion-view view-title="Albums" >
+<ion-view view-title="Albums">
   <ion-nav-buttons side="right">
     <button class="button button-clear" on-touch="openModalmodalAddAlbum()">
       <i class="icon ion-android-add"></i>
     </button>
   </ion-nav-buttons>
 
-  <ion-content>
+  <ion-content ng-class="currentThemeBackgroundColor">
 
     <div class="block-inline width-33"  ng-repeat="album in albums" on-hold="onHold(album.id)">
       <div class="block width-100 color-silver">

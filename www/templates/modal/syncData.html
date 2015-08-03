@@ -2,17 +2,17 @@
   <ion-header-bar class="bar-positive">
     <h1 class="title">Set sync time length </h1>
   </ion-header-bar>
-  <ion-content>
+  <ion-content ng-class="currentThemeBackgroundColor">
 
-    <center class="padding-top-30"><h3>{{syncDataTime}} min</h3></center>
+    <center class="padding-top-30"><h3 ng-class="currentThemeTextColor">{{syncDataTime}} min</h3></center>
     <div class="range range-positive">
-      <i >15 min</i>
+      <i ng-class="currentThemeTextColor">15 min</i>
       <input type="range" name="length" min="15" max="90" ng-model="syncDataTime" ng-change="dragRangeSyncDataTime(syncDataTime)">
-      <i >90 min</i>
+      <i ng-class="currentThemeTextColor">90 min</i>
     </div>
 
     <div class="button-bar padding-left-5 padding-right-5 margin-top-50">
-      <button class="button button-stable" on-touch="closeModalmodalSyncDataTime()">Cancel</button>
+      <button class="button" on-touch="closeModalmodalSyncDataTime()"  ng-class="[currentThemeButton, currentThemeBorder]">Cancel</button>
       <button class="button button-positive"  on-touch="closeModalmodalSyncDataTime()">OK</button>
     </div>
 

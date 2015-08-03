@@ -202,6 +202,12 @@ input{
 .overflow-hidden{
   overflow: hidden;
 }
+.dark-border-color{
+  border-color: #4f4f5a !important;
+}
+.light-border-color{
+  border-color: #dedede !important;
+}
 
 // override action sheet css
 .action-sheet-wrapper {
@@ -221,6 +227,19 @@ input{
 .action-sheet-destructive{
   text-align: center;
   color: #ff3b30;
+}
+
+
+// ovveride
+.item-radio .item-content{
+  position: relative;
+  z-index: 2;
+  padding: 16px 49px 16px 16px;
+  border: none;
+  background-color: transparent !important;
+}
+.item-radio input:checked ~ .item-content{
+  background: transparent;
 }
 
 .background-gradient-top-black{

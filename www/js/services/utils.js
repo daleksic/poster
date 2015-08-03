@@ -4,8 +4,6 @@ angular.module('starter.utils', [])
 
   return {
 
-  //  preferences: $window.plugins.appPreferences,
-
     get: function (key) {
       var q = $q.defer();
       var valueResponse = undefined;
@@ -19,8 +17,6 @@ angular.module('starter.utils', [])
       }, key);
 
       return q.promise;
-    //  console.log('Utils valueResponse: ' + valueResponse);
-    //  return valueResponse;
     },
 
     set: function (key, value) {
@@ -35,7 +31,6 @@ angular.module('starter.utils', [])
         }, key, value);
 
         return q.promise;
-
     }
 
   };

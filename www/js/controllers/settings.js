@@ -4,6 +4,31 @@ angular.module('starter.settings', [])
 
   $scope.splashScreenLength = 3;
   $scope.syncDataTime = 15;
+  $scope.theme = '';
+  $scope.currentThemeBackgroundColor = '';
+  $scope.currentThemeBorder = '';
+  $scope.currentThemeTextColor = '';
+  $scope.currentThemeButton = '';
+
+
+  $scope.$on('$ionicView.enter', function(){
+    UtilsService.get('PosterTheme').then(function(value){
+      var defaultTheme = 'light';
+      if(value != undefined){
+        defaultTheme =  value;
+      }
+      $scope.currentThemeBackgroundColor = defaultTheme + '-bg';
+      if(defaultTheme == 'dark'){
+        $scope.currentThemeTextColor = 'light';
+        $scope.currentThemeBorder = 'dark-border-color';
+        $scope.currentThemeButton = 'button-dark';
+      }else{
+        $scope.currentThemeTextColor = 'dark';
+        $scope.currentThemeBorder = 'light-border-color';
+        $scope.currentThemeButton = 'button-stable';
+      }
+    });
+  });
 
   $scope.dragRangeSyncDataTime = function(value) {
     $scope.syncDataTime= value;
@@ -20,10 +45,33 @@ angular.module('starter.settings', [])
     $scope.modalTheme = modal;
   });
   $scope.openModalTheme = function() {
-    $scope.modalTheme.show();
+
+    UtilsService.get('PosterTheme').then(function(value){
+      var defaultTheme = 'light';
+      if(value != undefined){
+        defaultTheme =  value;
+      }
+      $scope.theme = defaultTheme;
+      $scope.modalTheme.show();
+    });
   };
   $scope.closeModalTheme = function() {
     $scope.modalTheme.hide();
+  };
+  $scope.saveThemePreference = function () {
+    console.log('theme ok');
+    console.log($scope.theme);
+    console.log('theme ok');
+    UtilsService.set('PosterTheme', $scope.theme);
+    $scope.$parent.$broadcast( "$ionicView.enter" );
+    $scope.modalTheme.hide();
+
+  };
+  $scope.lightThemeSelected = function(theme){
+    $scope.theme = theme;
+  };
+  $scope.darkThemeSelected = function(theme){
+    $scope.theme = theme;
   };
 
 
@@ -33,23 +81,19 @@ angular.module('starter.settings', [])
   }).then(function(modal) {
     $scope.modalSplash = modal;
   });
+
   $scope.openModalSplash = function() {
-    console.log('splash open');
 
     UtilsService.get('PosterSplashScreenDelay').then(function(value){
-
-      console.log('Settings splashScreenDelay: ' + value);
       var delay = 3000;
       if(value != undefined){
-        delay =  value;
+          delay =  value;
       }
       $scope.splashScreenLength = delay/1000;
       $scope.modalSplash.show();
-
     });
-
-
   };
+
   $scope.closeModalSplash = function() {
     $scope.modalSplash.hide();
   };
@@ -58,7 +102,6 @@ angular.module('starter.settings', [])
     console.log('splash ok');
     UtilsService.set('PosterSplashScreenDelay', $scope.splashScreenLength*1000);
     $scope.modalSplash.hide();
-
   };
 
 

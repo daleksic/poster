@@ -2,25 +2,26 @@
   <ion-header-bar class="bar-positive">
     <h1 class="title">Change theme</h1>
   </ion-header-bar>
-  <ion-content>
+  <ion-content ng-class="currentThemeBackgroundColor">
 
-    <div class="list">
-      <label class="item item-radio">
-        <input type="radio" name="group">
-        <div class="item-content">Dark</div>
+    <div class="list" ng-class="currentThemeBackgroundColor">
+      <label class="item item-radio" ng-class="[currentThemeBackgroundColor, currentThemeBorder, currentThemeTextColor]">
+        <input type="radio" ng-model="theme" ng-value="'dark'" ng-change="darkThemeSelected('dark')">
+        <div class="item-content"  style="background-color: transparent !important;">Dark</div>
         <i class="radio-icon ion-checkmark positive"  style="padding-top: 8px;"></i>
       </label>
 
-      <label class="item item-radio">
-        <input type="radio" name="group">
-        <div class="item-content">Light</div>
+      <label class="item item-radio" ng-class="[currentThemeBackgroundColor, currentThemeBorder, currentThemeTextColor]">
+        <input type="radio"  ng-model="theme" ng-value="'light'" ng-change="lightThemeSelected('light')">
+        <div class="item-content" style="background-color: transparent !important;">Light</div>
         <i class="radio-icon ion-checkmark positive"  style="padding-top: 8px;"></i>
       </label>
+
     </div>
 
     <div class="button-bar padding-left-5 padding-right-5 margin-top-50">
-      <button class="button button-stable" on-touch="closeModalTheme()">Cancel</button>
-      <button class="button button-positive"  on-touch="closeModalTheme()">OK</button>
+      <button class="button" on-touch="closeModalTheme()" ng-class="[currentThemeButton, currentThemeBorder]">Cancel</button>
+      <button class="button button-positive"  on-touch="saveThemePreference()">OK</button>
     </div>
 
 

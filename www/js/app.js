@@ -16,25 +16,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.regis
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-    var now = new Date().getTime();
-    console.log("Time start: " + now);
+
     UtilsService.get('PosterSplashScreenDelay').then(function(value){
 
       var delay = 3000;
       if(value != undefined){
         delay =  value;
       }
-      var now2 = new Date().getTime();
-      var res = now2 - now;
 
       setTimeout(function() {
         $cordovaSplashscreen.hide();
-      }, delay - res);
+      }, delay - 2000);
       
-      console.log("Time finish: " + now);
-      console.log("Time pass: " + res);
-      console.log("AppJS delay: " + value);
-
     });
 
   });
