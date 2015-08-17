@@ -18,7 +18,7 @@ angular.module('starter.albumdetail', [])
 
   ];
 
-  $scope.$on('$ionicView.enter', function(){
+  $scope.$on('$ionicView.beforeEnter', function(){
     UtilsService.get('PosterTheme').then(function(value){
       var defaultTheme = 'light';
       if(value != undefined){

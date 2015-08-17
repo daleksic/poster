@@ -6,13 +6,13 @@
 
     <div class="list" ng-class="currentThemeBackgroundColor">
       <label class="item item-radio" ng-class="[currentThemeBackgroundColor, currentThemeBorder, currentThemeTextColor]">
-        <input type="radio" ng-model="theme" ng-value="'dark'" ng-change="darkThemeSelected('dark')">
+        <input type="radio" data-ng-model="theme" data-ng-value="'dark'" ng-change="darkThemeSelected('dark')">
         <div class="item-content"  style="background-color: transparent !important;">Dark</div>
         <i class="radio-icon ion-checkmark positive"  style="padding-top: 8px;"></i>
       </label>
 
       <label class="item item-radio" ng-class="[currentThemeBackgroundColor, currentThemeBorder, currentThemeTextColor]">
-        <input type="radio"  ng-model="theme" ng-value="'light'" ng-change="lightThemeSelected('light')">
+        <input type="radio"  data-ng-model="theme" data-ng-value="'light'" ng-change="lightThemeSelected('light')">
         <div class="item-content" style="background-color: transparent !important;">Light</div>
         <i class="radio-icon ion-checkmark positive"  style="padding-top: 8px;"></i>
       </label>

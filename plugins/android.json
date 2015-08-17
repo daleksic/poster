@@ -27,6 +27,20 @@
                         {
                             "xml": "<feature name=\"AppPreferences\"><param name=\"android-package\" value=\"me.apla.cordova.AppPreferences\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -50,6 +64,9 @@
             "PACKAGE_NAME": "com.ionicframework.poster528203"
         },
         "cordova-plugin-app-preferences": {
+            "PACKAGE_NAME": "com.ionicframework.poster528203"
+        },
+        "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ionicframework.poster528203"
         }
     },

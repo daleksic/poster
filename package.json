@@ -28,6 +28,10 @@
     {
       "locator": "https://github.com/apla/me.apla.cordova.app-preferences.git",
       "id": "cordova-plugin-app-preferences"
+    },
+    {
+      "locator": "https://github.com/apache/cordova-plugin-camera.git",
+      "id": "cordova-plugin-camera"
     }
   ],
   "cordovaPlatforms": [

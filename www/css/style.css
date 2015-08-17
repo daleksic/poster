@@ -23,6 +23,12 @@ input{
   display:block;
   position: absolute;
 }
+.absolute-center{
+  left:0 !important;
+  right:0 !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
 .fill{
   width: 100%;
   height: 100%;
@@ -33,6 +39,12 @@ input{
 .image{
   width: 100%;
   height: auto;
+  -webkit-transition: all .5s ease-in-out;
+}
+.image-effect{
+  width: auto;
+  height: 100%;
+  margin: 0 auto;
   -webkit-transition: all .5s ease-in-out;
 }
 .width-33{

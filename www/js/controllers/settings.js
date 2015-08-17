@@ -5,6 +5,7 @@ angular.module('starter.settings', [])
   $scope.splashScreenLength = 3;
   $scope.syncDataTime = 15;
   $scope.theme = '';
+
   $scope.currentThemeBackgroundColor = '';
   $scope.currentThemeBorder = '';
   $scope.currentThemeTextColor = '';
@@ -56,12 +57,11 @@ angular.module('starter.settings', [])
     });
   };
   $scope.closeModalTheme = function() {
+
     $scope.modalTheme.hide();
   };
   $scope.saveThemePreference = function () {
-    console.log('theme ok');
-    console.log($scope.theme);
-    console.log('theme ok');
+
     UtilsService.set('PosterTheme', $scope.theme);
     $scope.$parent.$broadcast( "$ionicView.enter" );
     $scope.modalTheme.hide();
@@ -95,11 +95,12 @@ angular.module('starter.settings', [])
   };
 
   $scope.closeModalSplash = function() {
+
     $scope.modalSplash.hide();
   };
 
   $scope.saveSplashScreenPreference = function () {
-    console.log('splash ok');
+
     UtilsService.set('PosterSplashScreenDelay', $scope.splashScreenLength*1000);
     $scope.modalSplash.hide();
   };
@@ -118,13 +119,11 @@ angular.module('starter.settings', [])
     $scope.modalSyncDataTime.hide();
   };
 
-
-
   //Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
     $scope.modalTheme.remove();
     $scope.modalSplash.remove();
-    $scope.modalSyncDataTime.remove()
+    $scope.modalSyncDataTime.remove();
   });
   // Execute action on hide modal
   $scope.$on('modal.hidden', function() {
