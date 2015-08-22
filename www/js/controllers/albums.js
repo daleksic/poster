@@ -1,9 +1,11 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, UtilsService) {
+.controller('AlbumsCtrl', function($scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, UtilsService, AlbumService) {
 
-  $scope.selectedAlbum = '';
+  $scope.selectedAlbumId = '';
+  $scope.selectedAlbumIndex = '';
   $scope.errorMessage = "";
+  $scope.modalType = "";
 
   $scope.currentThemeBackgroundColor = '';
   $scope.currentThemeBorder = '';
@@ -15,14 +17,14 @@ angular.module('starter.albums', [])
     description:''
   }
 
-  $scope.albums = [
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
+  $scope.albums = [];
+/*  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 3 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 4 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 5 }
 
-  ];
+  ];*/
 
   $scope.$on('$ionicView.beforeEnter', function(){
     UtilsService.get('PosterTheme').then(function(value){
@@ -41,10 +43,16 @@ angular.module('starter.albums', [])
         $scope.currentThemeButton = 'button-stable';
       }
     });
+
+    AlbumService.findAlbumsByUserId(1).then(function(albums){
+      $scope.albums = albums;
+    });
+
   });
 
-  $scope.onHold = function(id){
-    $scope.selectedAlbum = id;
+  $scope.onHold = function(id, index){
+    $scope.selectedAlbumId = id;
+    $scope.selectedAlbumIndex = index;
     $scope.showActionSheet();
   };
   $scope.goToAlbum = function(id){
@@ -57,9 +65,9 @@ angular.module('starter.albums', [])
     // Show the action sheet
     var hideSheet = $ionicActionSheet.show({
       buttons: [
-      { text: '<i class="icon ion-edit"></i><b >Edit</b>' }
+      { text: '<i class="icon ion-edit"></i><b>Edit</b>' }
       ],
-      destructiveText: '<i class="icon ion-android-delete"></i> <b >Delete</b>',
+      destructiveText: '<i class="icon ion-android-delete"></i><b>Delete</b>',
       titleText: 'Modify your album',
       cancelText: 'Cancel',
       cancel: function() {
@@ -67,12 +75,15 @@ angular.module('starter.albums', [])
       },
       buttonClicked: function(index) {
         if(index == 0){
-          $scope.openModalmodalAddAlbum();
+          //$scope.openModalUpdateAddAlbum();
+          $scope.openModalUpdateAddAlbum('update');
         }
         return true;
       },
       destructiveButtonClicked : function(){
-        alert("Delete");
+        AlbumService.deleteAlbum($scope.selectedAlbumId);
+        $scope.albums.splice($scope.selectedAlbumIndex, 1);
+        
       }
     });
 
@@ -82,19 +93,34 @@ angular.module('starter.albums', [])
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
-    $scope.modalAddAlbum = modal;
+    $scope.modalUpdateAddAlbum = modal;
   });
-  $scope.openModalmodalAddAlbum = function() {
+  $scope.openModalUpdateAddAlbum = function(type) {
+    $scope.modalType = type;
+    if(type == 'update'){
+      $scope.album.title = $scope.albums[$scope.selectedAlbumIndex].title;
+      $scope.album.description = $scope.albums[$scope.selectedAlbumIndex].description;
+    }
     //alert('Add album');
-    $scope.modalAddAlbum.show();
+    $scope.modalUpdateAddAlbum.show();
   };
-  $scope.closeModalAddAlbum = function() {
+  $scope.closeModalUpdateAddAlbum = function() {
     $scope.modalAddAlbum.hide();
+  };
+  $scope.addUpdateAlbum = function() {
+    if( $scope.modalType == 'update'){
+      AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
+    }else if($scope.modalType == 'add'){
+      AlbumService.addAlbum($scope.album.title, $scope.album.description, 1);
+    }
+    $scope.album.title = '';
+    $scope.album.description = '';
+    $scope.modalUpdateAddAlbum.hide();
   };
 
   //Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
-    $scope.modalAddAlbum.remove();
+    $scope.modalUpdateAddAlbum.remove();
   });
   // Execute action on hide modal
   $scope.$on('modal.hidden', function() {

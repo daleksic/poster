@@ -32,6 +32,10 @@
     {
       "locator": "https://github.com/apache/cordova-plugin-camera.git",
       "id": "cordova-plugin-camera"
+    },
+    {
+      "locator": "https://github.com/litehelpers/Cordova-sqlite-storage.git",
+      "id": "io.litehelpers.cordova.sqlite"
     }
   ],
   "cordovaPlatforms": [

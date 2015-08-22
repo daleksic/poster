@@ -8,13 +8,13 @@
 
   <ion-content ng-class="currentThemeBackgroundColor">
     <div class="block width-100 positive-bg padding-left-30 padding-right-30 padding-top-5 padding-bottom-5">
-      <h4 class="text-center text-color-white">Danger room</h4>
-      <p class="text-center text-color-white">Danger room description Danger room description</p>
+      <h4 class="text-center text-color-white">{{album.title}}</h4>
+      <p class="text-center text-color-white">{{album.description}}</p>
     </div>
 
-    <div class="block-inline width-33"  ng-repeat="image in images" on-hold="onHold(image.id)">
+    <div class="block-inline width-33"  ng-repeat="image in album.images" on-hold="onHold(image.id)">
       <div class="block width-100 color-silver overflow-hidden">
-        <a ui-sref="app.imageDetail({ albumId: 1, imageId: image.id})"><img class="block image" ng-src="{{image.image}}"  ng-class="{grayscale: selectedImage != image.id, zoom: selectedImage == image.id}"></a>
+        <a ui-sref="app.imageDetail({ albumId: 1, imageId: image.id})"><img class="block image" ng-src="{{image.uri}}"  ng-class="{grayscale: selectedImage != image.id, zoom: selectedImage == image.id}"></a>
       </div>
     </div>
   </ion-content>

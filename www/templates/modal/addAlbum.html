@@ -13,7 +13,7 @@
       </div>
 
       <div class="item item-input" style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Description is not valid')">
-        <input type="text" placeholder="Description" ng-model="title.description" >
+        <input type="text" placeholder="Description" ng-model="album.description" >
         <div  >
           <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
         </div>
@@ -21,8 +21,8 @@
   </div>
 
     <div class="button-bar  margin-top-50">
-      <button class="button" on-touch="closeModalAddAlbum()"  ng-class="[currentThemeButton, currentThemeBorder]">Cancel</button>
-      <button class="button button-positive"  on-touch="closeModalAddAlbum()">OK</button>
+      <button class="button" on-touch="closeModalUpdateAddAlbum()"  ng-class="[currentThemeButton, currentThemeBorder]">Cancel</button>
+      <button class="button button-positive"  on-touch="addUpdateAlbum()">OK</button>
     </div>
 
 
