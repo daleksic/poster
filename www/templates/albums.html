@@ -7,12 +7,12 @@
 
   <ion-content ng-class="currentThemeBackgroundColor">
 
-    <div class="block-inline width-33"  ng-repeat="album in albums" on-hold="onHold(album.id, $index)">
+    <div class="block-inline width-33"  ng-repeat="album in albums" on-hold="onHold(album.id, $index)" style="height: {{Itemheight}}px; overflow: hidden;">
       <div class="block width-100 color-silver">
-        <a ui-sref="app.albumDetail({ albumId: album.id })"><img class="block image" ng-src="{{album.image}}"></a>
-        <div id="album-{{album.id}}" class="block-absolute bottom width-100 padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 text-center" ng-class="{albumSelected: selectedAlbumId == album.id, albumDeselected: selectedAlbumId != album.id}">
-          <a class="text-underline-none text-color-white" ui-sref="app.albumDetail({ albumId: album.id })">{{album.title}}</a>
-        </div>
+        <a ui-sref="app.albumDetail({ albumId: album.id })"><img class="block image" ng-src="{{album.image}}" style="top: -70% !important;"></a>
+      </div>
+      <div id="album-{{album.id}}" class="block-absolute bottom width-100 padding-left-5 padding-right-5 padding-top-5 padding-bottom-5 text-center" ng-class="{albumSelected: selectedAlbumId == album.id, albumDeselected: selectedAlbumId != album.id}">
+        <a class="text-underline-none text-color-white" ui-sref="app.albumDetail({ albumId: album.id })">{{album.title}}</a>
       </div>
     </div>
 

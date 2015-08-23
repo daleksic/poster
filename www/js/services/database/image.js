@@ -1,33 +1,51 @@
 angular.module('starter.service.image', ['starter.database'])
 
-.factory('ImageService', ['DatabaseService', function (DatabaseService) {
+.factory('ImageService', ['$q', 'DatabaseService', function ($q, DatabaseService) {
 
   return {
 
-    addImage: function(title, description, userId){
-      DatabaseService.insertAlbum(title, description, userId);
+    addImage: function(title, location, uri, width, height, contentType, albumId){
+      DatabaseService.insertImage(title, location, uri, width, height, contentType, albumId);
     },
 
     deleteImage: function(albumId){
-      DatabaseService.deleteAlbum(albumId);
+      DatabaseService.deleteImage(albumId);
     },
 
-    updateAlbum: function (title, description, albumId) {
-
-      DatabaseService.insertAlbum(title, description, albumId);
+    findImageById: function (imageId) {
+      var q = $q.defer();
+      var image = {};
+      DatabaseService.findImageById(imageId).then(function(result){
+        for(var i=0; i < result.rows.length; i++){
+          image['id'] = result.rows.item(0).image_id;
+          image['title'] = result.rows.item(0).image_title;
+          image['location'] = result.rows.item(0).image_location;
+          image['uri'] = result.rows.item(0).image_uri;
+          image['date_created'] = result.rows.item(0).image_date_created;
+        }
+        q.resolve(image);
+      });
+      return q.promise;
     },
+    findImagesByAlbumId: function (albumId) {
+      var q = $q.defer();
+      var images = [];
+      DatabaseService.findImagesByAlbumId(albumId).then(function(result){
+        for(var i=0; i < result.rows.length; i++){
+          var image = {};
+          image['id'] = result.rows.item(i).image_id;
+          image['title'] = result.rows.item(i).image_title;
+          image['location'] = result.rows.item(i).image_location;
+          image['uri'] = result.rows.item(i).image_uri;
+          image['date_created'] = result.rows.item(i).image_date_created;  
+          images.push(image);
+       }
+       q.resolve(images);
 
-    findAlbumById: function (albumId) {
-      var result = DatabaseService.findAlbumById(albumId);
+     });
+     return q.promise;
+   }
 
-    },
-    findAlbumsByUserId: function (userId) {
-      var result = DatabaseService.findAlbumsByUserId(userId);
-      console.log("SELECTED -> ");
-      console.log(result.rows.length);
-      console.log("SELECTED -> ");
-     }
-
-};
+ };
 
 }]);

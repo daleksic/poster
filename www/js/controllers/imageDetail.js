@@ -1,11 +1,37 @@
 angular.module('starter.imagedetail', [])
 
-.controller('ImageDetailCtrl', function($scope) {
+.controller('ImageDetailCtrl', function($scope, $stateParams, $ionicSlideBoxDelegate, ImageService) {
 
-  $scope.images = [
-  { title: 'Image title 1', url: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fdroidlessons.com%2Fwp-content%2Fuploads%2F2012%2F05%2Fhtc_one_x_screenshot.png&f=1", date: "25-08-2015", location: "City 1, Country", id: 1 },
-  { title: 'Image title 2', url: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fforums.androidcentral.com%2Fattachments%2Fhtc-one-m8%2F109681d1395933442t-share-your-htc-one-m8-screenshots-setup-1395933442684.jpg&f=1", date: "25-08-2015", location: "City 2, Country", id: 2 },
-  { title: 'Image title 3', url: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fforums.androidcentral.com%2Fattachments%2Fhtc-one-m8%2F109689d1395935114t-share-your-htc-one-m8-screenshots-setup-screenshot_2014-03-27-11-41-29.png&f=1", date: "25-08-2015", location: "City 3, Country", id: 3 }
-  ];
+  $scope.images = [];
+  $scope.activeSlide = 0;
+  $scope.$on('$ionicView.beforeEnter', function(){
+    //console.log($stateParams.albumId);
+    ImageService.findImagesByAlbumId($stateParams.albumId).then(function(images){
+
+      $scope.images = images;
+      $scope.findSelected();
+      $ionicSlideBoxDelegate.update();
+
+    });
+
+  });
+ $scope.$on('$ionicView.enter', function(){
+
+    $ionicSlideBoxDelegate.slide( $scope.activeSlide);
+  });
+
+  $scope.slideChanged = function(index) {
+    console.log('Slide changed to ' + index);
+  };
+
+  $scope.findSelected = function(){
+    var id = $stateParams.imageId;
+    for(var i=0; i< $scope.images.length; i++){
+      if( $scope.images[i].id == id ){
+        $scope.activeSlide = i;
+        console.log(  $scope.activeSlide );
+      }
+    }
+  };
 
 });

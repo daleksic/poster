@@ -1,6 +1,6 @@
 angular.module('starter.service.album', ['starter.database'])
 
-.factory('AlbumService', ['$q', 'DatabaseService', function ($q, DatabaseService) {
+.factory('AlbumService', ['$q', 'DatabaseService', 'ImageService', function ($q, DatabaseService, ImageService) {
 
   return {
 
@@ -25,9 +25,11 @@ angular.module('starter.service.album', ['starter.database'])
           album['title'] = result.rows.item(0).album_title;
           album['description'] = result.rows.item(0).album_description;
           album['userId'] = result.rows.item(0).album_user_id;
-          album['images'] = [{id: 1, uri:'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1'},
-                            {id: 2, uri:'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1'},
-                            {id: 3, uri:'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1'}];
+          ImageService.findImagesByAlbumId(result.rows.item(0).album_id).then(function(images){
+
+            album['images'] = images;
+
+          });
 
         q.resolve(album);
 
@@ -44,12 +46,20 @@ angular.module('starter.service.album', ['starter.database'])
           album['title'] = result.rows.item(i).album_title;
           album['description'] = result.rows.item(i).album_description;
           album['userId'] = result.rows.item(i).album_user_id;
-          album['image'] = 'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1';
+          album['image'] = "file:///android_asset/www/img/defaultImage.jpg";
+      /*    album['image'] = "file:///android_asset/www/img/defaultImage.jpg";
+          ImageService.findImagesByAlbumId(result.rows.item(i).album_id).then(function(images){
+            if(images.length > 0)
+              album['image'] = images[0].uri;
+
+          });*/
           albums.push(album);
+          //album['image'] = 'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1';
         }
-        console.log(JSON.stringify(albums));
+      //  console.log(JSON.stringify(albums));
         q.resolve(albums);
       });
+
       return q.promise;
   }
 

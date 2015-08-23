@@ -83,7 +83,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.regis
     }
   })
   .state('app.effect', {
-    url: "/effect",
+    url: "/albums/:albumId/effect",
     views: {
       'menuContent': {
         templateUrl: "templates/effect.html",

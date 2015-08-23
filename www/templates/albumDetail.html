@@ -1,7 +1,7 @@
 <ion-view view-title="Album detail">
 
   <ion-nav-buttons side="right">
-    <a class="button button-clear" ui-sref="app.effect()">
+    <a class="button button-clear" ui-sref="app.effect({albumId: albumId})">
       <i class="icon ion-android-camera"></i>
     </a>
   </ion-nav-buttons>
@@ -12,9 +12,9 @@
       <p class="text-center text-color-white">{{album.description}}</p>
     </div>
 
-    <div class="block-inline width-33"  ng-repeat="image in album.images" on-hold="onHold(image.id)">
+    <div class="block-inline width-33"  ng-repeat="image in album.images" on-hold="onHold(image.id, $index)" style="height: {{Itemheight}}px; overflow: hidden;">
       <div class="block width-100 color-silver overflow-hidden">
-        <a ui-sref="app.imageDetail({ albumId: 1, imageId: image.id})"><img class="block image" ng-src="{{image.uri}}"  ng-class="{grayscale: selectedImage != image.id, zoom: selectedImage == image.id}"></a>
+        <a ui-sref="app.imageDetail({ albumId: albumId, imageId: image.id})"><img class="block image" ng-src="{{image.uri}}"  ng-class="{grayscale: selectedImage != image.id, zoom: selectedImage == image.id}" style="top: -70% !important;"></a>
       </div>
     </div>
   </ion-content>

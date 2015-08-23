@@ -1,6 +1,6 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, UtilsService, AlbumService) {
+.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, UtilsService, AlbumService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
@@ -11,6 +11,7 @@ angular.module('starter.albums', [])
   $scope.currentThemeBorder = '';
   $scope.currentThemeTextColor = '';
   $scope.currentThemeButton = '';
+  $scope.Itemheight = $window.innerWidth /2;
 
   $scope.album = {
     title:'',
@@ -18,15 +19,10 @@ angular.module('starter.albums', [])
   }
 
   $scope.albums = [];
-/*  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 3 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 4 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 5 }
-
-  ];*/
 
   $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.selectedAlbumId = '';
+    $scope.selectedAlbumIndex = '';
     UtilsService.get('PosterTheme').then(function(value){
       var defaultTheme = 'light';
       if(value != undefined){
@@ -83,7 +79,7 @@ angular.module('starter.albums', [])
       destructiveButtonClicked : function(){
         AlbumService.deleteAlbum($scope.selectedAlbumId);
         $scope.albums.splice($scope.selectedAlbumIndex, 1);
-        
+
       }
     });
 
@@ -105,13 +101,14 @@ angular.module('starter.albums', [])
     $scope.modalUpdateAddAlbum.show();
   };
   $scope.closeModalUpdateAddAlbum = function() {
-    $scope.modalAddAlbum.hide();
+    $scope.modalUpdateAddAlbum.hide();
   };
   $scope.addUpdateAlbum = function() {
     if( $scope.modalType == 'update'){
       AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
     }else if($scope.modalType == 'add'){
       AlbumService.addAlbum($scope.album.title, $scope.album.description, 1);
+
     }
     $scope.album.title = '';
     $scope.album.description = '';

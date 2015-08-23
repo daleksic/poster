@@ -1,6 +1,6 @@
 angular.module('starter.effect', [])
 
-.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $cordovaCamera, $document, ImageEffect, UtilsService) { //, ImageEffect
+.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicPopover, ImageEffect, UtilsService, ImageService) {
 
     $scope.height = $window.innerHeight - 45;
     $scope.selectedColor = '';
@@ -9,9 +9,15 @@ angular.module('starter.effect', [])
     $scope.original='';
     $scope.canvasExists = false;
     $scope.canvas = '';
+    $scope.image= {
+      imageTitle: ''
+    };
+    $scope.errorMessage = '';
 
     $scope.currentThemeBackgroundColor = '';
+    $scope.currentThemeBorder = '';
     $scope.currentThemeTextColor = '';
+    $scope.currentThemeButton = '';
 
     $scope.colors = [{'name': 'clouds', 'hashcode': 'ecf0f1'},
       {'name': 'silver', 'hashcode': 'bdc3c7'},
@@ -68,12 +74,61 @@ angular.module('starter.effect', [])
         $scope.currentThemeBackgroundColor = defaultTheme + '-bg';
         if(defaultTheme == 'dark'){
           $scope.currentThemeTextColor = 'light';
+          $scope.currentThemeBorder = 'dark-border-color';
+          $scope.currentThemeButton = 'button-dark';
         }else{
           $scope.currentThemeTextColor = 'dark';
+          $scope.currentThemeBorder = 'light-border-color';
+          $scope.currentThemeButton = 'button-stable';
         }
       });
 
 
+    });
+
+    $ionicModal.fromTemplateUrl('templates/modal/addImage.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modalAddImage = modal;
+    });
+    $scope.openModaAddImage = function(type) {
+      $scope.modalAddImage.show();
+    };
+    $scope.closeModalAddImage= function() {
+      $scope.modalAddImage.hide();
+    };
+    $scope.addImage = function() {
+
+        var img = $scope.canvas.toDataURL("image/jpeg");
+        var data = img.replace(/^data:image\/\w+;base64,/, "");
+        //  var buf = new Buffer(data, 'base64');
+        var name =  $scope.image.imageTitle + '_' + makeid() + '.jpg';
+        //console.log(JSON.stringify(data));
+        var fileName, uri = '';
+        $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
+        //  console.log(result);
+          fileName = result.name;
+          uri = result.nativeURL;
+          $cordovaFile.writeFile(cordova.file.externalDataDirectory, name, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
+            console.log(writeResult);
+          //  console.log(fileName);
+          //  console.log(uri);
+           var width = $scope.canvas.width;
+            var height = $scope.canvas.height;
+            var album = $stateParams.albumId;
+            ImageService.addImage($scope.image.imageTitle, 'No location', uri, width, height, 'image/jpeg', album);
+            $state.go('app.albumDetail', {albumId: $stateParams.albumId});
+          });
+        });
+
+        $scope.title = '';
+        $scope.modalAddImage.hide();
+    };
+
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modalAddImage.remove();
     });
 
 
@@ -94,54 +149,6 @@ angular.module('starter.effect', [])
     //  console.log(JSON.stringify($scope.original));
     };
 
-
-  /*  $scope.applyColor = function(event){
-
-
-      var canvasPosition = getPosition(event.gesture.touches[0].target);
-
-      var tap = { x:0, y:0 };
-      if(event.gesture.touches.length>0){
-        tt = event.gesture.touches[0];
-        tap.x = tt.clientX || tt.pageX || tt.screenX ||0;
-        tap.y = tt.clientY || tt.pageY || tt.screenY ||0;
-      }
-      tap.x = tap.x - canvasPosition.x;
-      tap.y = tap.y - canvasPosition.y;
-
-
-      console.log(tap);
-    };
-
-    $scope.applyEffect = function(){
-
-      if( $scope.canvasExists == false){
-         $scope.init($scope.imageData);
-         $scope.canvasExists = true;
-      }
-
-      var ctx =  $scope.canvas.getContext('2d');
-
-      var imgd = ctx.getImageData(0, 0, $scope.canvas.width, $scope.canvas.height);
-      var pix = imgd.data;
-      console.log(pix[0] + ' ' + pix[1] + ' ' + pix[2]);
-      console.log('applyKMeansEffect effect.js');
-
-      var newData = ImageEffect.vintage(pix);//.then(function(newData){ gray(pix);
-        console.log('newImgd');
-        console.log(newData[0] + ' ' + newData[1] + ' ' + newData[2]);
-        console.log('newImgd');
-        imgd.data = newData;
-        // Draw the ImageData at the given (x,y) coordinates.
-        ctx.putImageData(imgd, 0, 0);
-        var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
-        $scope.imageCaptured =  jpegUrl;
-        $scope.imageData = jpegUrl;
-    //  });
-
-      console.log('finished applyKMeansEffect effect.js');
-
-    };*/
 
     $scope.applyOriginal = function(){
       if( $scope.canvasExists == false){
@@ -235,6 +242,16 @@ angular.module('starter.effect', [])
 
     };
 
+    function makeid() {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for (var i=0; i < 5; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    };
+
 
 
     function getPosition(element) {
@@ -248,5 +265,94 @@ angular.module('starter.effect', [])
       }
       return { x: xPosition, y: yPosition };
     };
+
+
+    var Base64Binary = {
+      _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+      /* will return a  Uint8Array type */
+      decodeArrayBuffer: function(input) {
+        var bytes = (input.length/4) * 3;
+        var ab = new ArrayBuffer(bytes);
+        this.decode(input, ab);
+
+        return ab;
+      },
+
+      removePaddingChars: function(input){
+        var lkey = this._keyStr.indexOf(input.charAt(input.length - 1));
+        if(lkey == 64){
+          return input.substring(0,input.length - 1);
+        }
+        return input;
+      },
+
+      decode: function (input, arrayBuffer) {
+        //get last chars to see if are valid
+        input = this.removePaddingChars(input);
+        input = this.removePaddingChars(input);
+
+        var bytes = parseInt((input.length / 4) * 3, 10);
+
+        var uarray;
+        var chr1, chr2, chr3;
+        var enc1, enc2, enc3, enc4;
+        var i = 0;
+        var j = 0;
+
+        if (arrayBuffer)
+          uarray = new Uint8Array(arrayBuffer);
+          else
+            uarray = new Uint8Array(bytes);
+
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+            for (i=0; i<bytes; i+=3) {
+              //get the 3 octects in 4 ascii chars
+              enc1 = this._keyStr.indexOf(input.charAt(j++));
+              enc2 = this._keyStr.indexOf(input.charAt(j++));
+              enc3 = this._keyStr.indexOf(input.charAt(j++));
+              enc4 = this._keyStr.indexOf(input.charAt(j++));
+
+              chr1 = (enc1 << 2) | (enc2 >> 4);
+              chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+              chr3 = ((enc3 & 3) << 6) | enc4;
+
+              uarray[i] = chr1;
+              if (enc3 != 64) uarray[i+1] = chr2;
+              if (enc4 != 64) uarray[i+2] = chr3;
+            }
+
+            return uarray;
+          }
+        };
+
+        $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/
+            scope: $scope
+          }).then(function(popover) {
+            $scope.popover = popover;
+          });
+
+          $scope.openPopover = function($event, message) {
+            $scope.popover.show($event);
+            $scope.errorMessage = message;
+          };
+
+          $scope.closePopover = function() {
+            $scope.popover.hide();
+          };
+
+          //Cleanup the popover when we're done with it!
+          $scope.$on('$destroy', function() {
+            $scope.popover.remove();
+          });
+          // Execute action on hide popover
+          $scope.$on('popover.hidden', function() {
+            // Execute action
+          });
+          // Execute action on remove popover
+          $scope.$on('popover.removed', function() {
+            // Execute action
+        });
 
 });

@@ -1,15 +1,18 @@
 angular.module('starter.albumdetail', [])
 
-.controller('AlbumDetailCtrl', function($scope, $ionicActionSheet, $stateParams, UtilsService, AlbumService) {
+.controller('AlbumDetailCtrl', function($scope,  $window, $ionicActionSheet, $stateParams, UtilsService, AlbumService, ImageService) {
 
   $scope.selectedImage = '';
+  $scope.selectedImageIndex = '';
 
   $scope.currentThemeBackgroundColor = '';
   $scope.currentThemeBorder = '';
   $scope.currentThemeTextColor = '';
   $scope.currentThemeButton = '';
+  $scope.Itemheight = $window.innerWidth /2;
 
   $scope.album = {};
+  $scope.albumId = '';
   $scope.images = [
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
   { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
@@ -20,6 +23,7 @@ angular.module('starter.albumdetail', [])
   ];
 
   $scope.$on('$ionicView.beforeEnter', function(){
+    $scope.albumId = $stateParams.albumId;
     UtilsService.get('PosterTheme').then(function(value){
       var defaultTheme = 'light';
       if(value != undefined){
@@ -37,15 +41,16 @@ angular.module('starter.albumdetail', [])
       }
     });
 
-    AlbumService.findAlbumById($stateParams.albumId).then(function(album){
+    AlbumService.findAlbumById($scope.albumId).then(function(album){
       $scope.album = album;
     //  console.log(JSON.stringify(album));
     });
 
   });
 
-  $scope.onHold = function(id){
+  $scope.onHold = function(id, index){
     $scope.selectedImage = id;
+    $scope.selectedImageIndex = index;
     $scope.showActionSheet();
   };
 
@@ -70,6 +75,8 @@ angular.module('starter.albumdetail', [])
       },
       destructiveButtonClicked : function(){
         alert("Delete");
+        ImageService.deleteImage($scope.selectedImage);
+        $scope.album.images.splice($scope.selectedImageIndex, 1);
       }
     });
 

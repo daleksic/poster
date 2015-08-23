@@ -36,6 +36,14 @@
     {
       "locator": "https://github.com/litehelpers/Cordova-sqlite-storage.git",
       "id": "io.litehelpers.cordova.sqlite"
+    },
+    {
+      "locator": "https://github.com/wymsee/cordova-imageResizer.git",
+      "id": "com.synconset.imageResizer"
+    },
+    {
+      "locator": "https://github.com/apache/cordova-plugin-file.git",
+      "id": "cordova-plugin-file"
     }
   ],
   "cordovaPlatforms": [

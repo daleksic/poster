@@ -17,7 +17,7 @@ angular.module('starter.database', [])
       //'DROP TABLE IF EXISTS test_table'
       $cordovaSQLite.execute(this.getDatabase(), "CREATE TABLE IF NOT EXISTS user ( user_id integer primary key autoincrement, user_fullname text not null, user_email text not null, user_password text not null, user_last_time_modified text not null)");
       $cordovaSQLite.execute(this.getDatabase(), "CREATE TABLE IF NOT EXISTS album ( album_id integer primary key autoincrement, album_title text not null, album_description text not null, album_last_time_modified text not null, album_user_id integer not null, foreign key ( album_user_id ) references user ( user_id ))");
-      $cordovaSQLite.execute(this.getDatabase(), "CREATE TABLE IF NOT EXISTS image ( image_id integer primary key autoincrement, image_title text not null, image_location text not null, image_uri text not null, image_date_created text not null, image_width integer not null, image_height integer not null, image_content_type text not null, image_last_time_modified text not null, image_album_id integer not null, foreign key (  image_album_id ) references album ( album_id ))");
+      $cordovaSQLite.execute(this.getDatabase(), "CREATE TABLE IF NOT EXISTS image ( image_id integer primary key autoincrement, image_title text not null, image_location text not null, image_uri text not null, image_date_created text not null, image_width text not null, image_height text not null, image_content_type text not null, image_last_time_modified text not null, image_album_id integer not null, foreign key (  image_album_id ) references album ( album_id ))");
     },
 
     insertAlbum: function (title, description, user_id) {
@@ -84,9 +84,10 @@ angular.module('starter.database', [])
       return q.promise;
     },
 
-    insertImage: function (title, location, uri, width, height, content_type, album_id) {
-      var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date(), width, height, content_type, new Date(), album_id]).then(function(res) {                 // potrebno formatiranje datuma
+    insertImage: function (title, location, uri, width, height, contentType, albumId) {
+      var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, image_content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date()+'', width, height, contentType, new Date()+'', albumId]).then(function(res) {                 // potrebno formatiranje datuma
+
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -105,7 +106,7 @@ angular.module('starter.database', [])
     },
     findImageById: function (imageId) {
       var q = $q.defer();
-      var query = "SELECT image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id FROM album WHERE image_id = ?";
+      var query = "SELECT image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id FROM image WHERE image_id = ?";
       $cordovaSQLite.execute(this.getDatabase(), query, [imageId]).then(function(res) {
         if(res.rows.length > 0) {
           console.log("SELECTED -> ");
@@ -124,12 +125,12 @@ angular.module('starter.database', [])
     },
     findImagesByAlbumId: function (albumId) {
       var q = $q.defer();
-      var query = "SELECT image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id FROM album WHERE image_album_id = ?";
+      var query = "SELECT * FROM image WHERE image_album_id = ?";
       $cordovaSQLite.execute(this.getDatabase(), query, [albumId]).then(function(res) {
         if(res.rows.length > 0) {
-          console.log("SELECTED -> ");
+          console.log("SELECTED -> " + res.rows.length + " IMAGES");
           //console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
-
+// image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id
           q.resolve(res);
         } else {
           console.log("No results found");
@@ -140,10 +141,10 @@ angular.module('starter.database', [])
       });
       return q.promise;
     },
-    insertUser: function (fullname, email, password) {
+    insertUser: function (fullName, email, password) {
 
       var query = "INSERT INTO user (user_fullname, user_email, user_password, user_last_time_modified) VALUES ( ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [fullname, email, password, new Date()]).then(function(res) {                 // potrebno formatiranje datuma
+      $cordovaSQLite.execute(this.getDatabase(), query, [fullName, email, password, new Date() + '']).then(function(res) {                 // potrebno formatiranje datuma
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
