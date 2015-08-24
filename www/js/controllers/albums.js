@@ -1,6 +1,6 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, UtilsService, AlbumService) {
+.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
@@ -83,7 +83,7 @@ angular.module('starter.albums', [])
       destructiveButtonClicked : function(){
         AlbumService.deleteAlbum($scope.selectedAlbumId);
         $scope.albums.splice($scope.selectedAlbumIndex, 1);
-
+        $cordovaToast.show('Album is deleted.', 'short', 'bottom');
       }
     });
 
@@ -110,9 +110,10 @@ angular.module('starter.albums', [])
   $scope.addUpdateAlbum = function() {
     if( $scope.modalType == 'update'){
       AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
+      $cordovaToast.show('Album is updated.', 'short', 'bottom');
     }else if($scope.modalType == 'add'){
       AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
-
+      $cordovaToast.show('New album is added.', 'short', 'bottom');
     }
     $scope.album.title = '';
     $scope.album.description = '';

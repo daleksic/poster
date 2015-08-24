@@ -1,6 +1,6 @@
 angular.module('starter.effect', [])
 
-.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicPopover, ImageEffect, UtilsService, ImageService) {
+.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicPopover, $cordovaToast, ImageEffect, UtilsService, ImageService) {
 
     $scope.height = $window.innerHeight - 45;
     $scope.selectedColor = '';
@@ -13,33 +13,12 @@ angular.module('starter.effect', [])
       imageTitle: ''
     };
     $scope.errorMessage = '';
+    $scope.effectApplied = false;
 
     $scope.currentThemeBackgroundColor = '';
     $scope.currentThemeBorder = '';
     $scope.currentThemeTextColor = '';
     $scope.currentThemeButton = '';
-
-    $scope.colors = [{'name': 'clouds', 'hashcode': 'ecf0f1'},
-      {'name': 'silver', 'hashcode': 'bdc3c7'},
-      {'name': 'concrete', 'hashcode': '95a5a6'},
-      {'name': 'asbestos', 'hashcode': '7f8c8d'},
-      {'name': 'wetasphalt', 'hashcode': '34495e'},
-      {'name': 'midnightblue', 'hashcode': '2c3e50'},
-      {'name': 'peterriver', 'hashcode': '3498db'},
-      {'name': 'belizehole', 'hashcode': '2980b9'},
-      {'name': 'amethyst', 'hashcode': '9b59b6'},
-      {'name': 'wisteria', 'hashcode': '8e44ad'},
-      {'name': 'pomegranate', 'hashcode': 'c0392b'},
-      {'name': 'alizarin', 'hashcode': 'e74c3c'},
-      {'name': 'pumpkin', 'hashcode': 'd35400'},
-      {'name': 'carrot', 'hashcode': 'e67e22'},
-      {'name': 'orange', 'hashcode': 'f39c12'},
-      {'name': 'sunflower', 'hashcode': 'f1c40f'},
-      {'name': 'emerald', 'hashcode': '2ecc71'},
-      {'name': 'nephritis', 'hashcode': '27ae60'},
-      {'name': 'turqoise', 'hashcode': '1abc9c'},
-      {'name': 'greensea', 'hashcode': '16a085'}];
-
 
     $scope.selectColor = function(name){
       $scope.selectedColor = name;
@@ -60,7 +39,6 @@ angular.module('starter.effect', [])
 
         $scope.imageCaptured =  "data:image/jpeg;base64," + imageData;
         $scope.imageData = imageData;
-
 
       }, function(err) {
         // error
@@ -93,7 +71,12 @@ angular.module('starter.effect', [])
       $scope.modalAddImage = modal;
     });
     $scope.openModaAddImage = function(type) {
-      $scope.modalAddImage.show();
+      if($scope.effectApplied == true){
+        $scope.modalAddImage.show();
+      }else{
+        $cordovaToast.show('Effect is not applied.', 'short', 'bottom');
+      }
+
     };
     $scope.closeModalAddImage= function() {
       $scope.modalAddImage.hide();
@@ -102,22 +85,18 @@ angular.module('starter.effect', [])
 
         var img = $scope.canvas.toDataURL("image/jpeg");
         var data = img.replace(/^data:image\/\w+;base64,/, "");
-        //  var buf = new Buffer(data, 'base64');
         var name =  $scope.image.imageTitle + '_' + makeid() + '.jpg';
-        //console.log(JSON.stringify(data));
         var fileName, uri = '';
         $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
-        //  console.log(result);
           fileName = result.name;
           uri = result.nativeURL;
           $cordovaFile.writeFile(cordova.file.externalDataDirectory, name, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
             console.log(writeResult);
-          //  console.log(fileName);
-          //  console.log(uri);
-           var width = $scope.canvas.width;
+            var width = $scope.canvas.width;
             var height = $scope.canvas.height;
             var album = $stateParams.albumId;
             ImageService.addImage($scope.image.imageTitle, 'No location', uri, width, height, 'image/jpeg', album);
+            $cordovaToast.show('New image is added.', 'short', 'bottom');
             $state.go('app.albumDetail', {albumId: $stateParams.albumId});
           });
         });
@@ -166,6 +145,7 @@ angular.module('starter.effect', [])
       var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
       $scope.imageCaptured =  jpegUrl;
       $scope.imageData = jpegUrl;
+      $scope.effectApplied = true;
 
     };
     $scope.applySepia = function(){
@@ -184,6 +164,7 @@ angular.module('starter.effect', [])
       var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
       $scope.imageCaptured =  jpegUrl;
       $scope.imageData = jpegUrl;
+      $scope.effectApplied = true;
 
     };
     $scope.applyGrayscale = function(){
@@ -203,6 +184,7 @@ angular.module('starter.effect', [])
       var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
       $scope.imageCaptured =  jpegUrl;
       $scope.imageData = jpegUrl;
+      $scope.effectApplied = true;
 
     };
     $scope.applyVintage = function(){
@@ -221,6 +203,7 @@ angular.module('starter.effect', [])
       var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
       $scope.imageCaptured =  jpegUrl;
       $scope.imageData = jpegUrl;
+      $scope.effectApplied = true;
 
     };
     $scope.applyInvert = function(){
@@ -239,6 +222,7 @@ angular.module('starter.effect', [])
       var jpegUrl = $scope.canvas.toDataURL("image/jpeg");
       $scope.imageCaptured =  jpegUrl;
       $scope.imageData = jpegUrl;
+      $scope.effectApplied = true;
 
     };
 

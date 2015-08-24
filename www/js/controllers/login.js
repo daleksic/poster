@@ -1,6 +1,6 @@
 angular.module('starter.login', [])
 
-.controller('LoginCtrl', function($scope, $ionicPopover, $state, UtilsService, UserService) {
+.controller('LoginCtrl', function($scope, $ionicPopover, $state, $cordovaToast, UtilsService, UserService) {
   $scope.errorMessage = "";
   $scope.user = {
     email:"",
@@ -15,6 +15,7 @@ angular.module('starter.login', [])
             UtilsService.set('PosterActiveUser', user.id).then(function(response){
               $scope.user.email = "";
               $scope.user.password = "";
+              $cordovaToast.show('Welcome, ' + user.fullname + '.', 'short', 'bottom');
               $state.go('app.albums');
             });
           });

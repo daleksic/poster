@@ -1,6 +1,6 @@
 angular.module('starter.register', [])
 
-.controller('RegisterCtrl', function($scope, $ionicPopover, $state, UserService) {
+.controller('RegisterCtrl', function($scope, $ionicPopover, $state, $cordovaToast, UserService) {
   $scope.errorMessage = "";
   $scope.user = {
     fullName:"",
@@ -11,6 +11,7 @@ angular.module('starter.register', [])
   $scope.register = function() {
     UserService.registerUser($scope.user.fullName, $scope.user.email, $scope.user.password);
     if(true){
+      $cordovaToast.show('User is registered.', 'short', 'bottom');
       $state.go('login');
     }
   };

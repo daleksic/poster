@@ -1,6 +1,6 @@
 angular.module('starter.albumdetail', [])
 
-.controller('AlbumDetailCtrl', function($scope,  $window, $ionicActionSheet, $stateParams, UtilsService, AlbumService, ImageService) {
+.controller('AlbumDetailCtrl', function($scope,  $window, $ionicActionSheet, $stateParams, $cordovaToast, UtilsService, AlbumService, ImageService) {
 
   $scope.selectedImage = '';
   $scope.selectedImageIndex = '';
@@ -73,10 +73,10 @@ angular.module('starter.albumdetail', [])
         }
         return true;
       },
-      destructiveButtonClicked : function(){
-        alert("Delete");
+      destructiveButtonClicked : function(){      
         ImageService.deleteImage($scope.selectedImage);
         $scope.album.images.splice($scope.selectedImageIndex, 1);
+        $cordovaToast.show('Image is deleted', 'short', 'bottom');
       }
     });
 

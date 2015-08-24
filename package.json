@@ -44,6 +44,10 @@
     {
       "locator": "https://github.com/apache/cordova-plugin-file.git",
       "id": "cordova-plugin-file"
+    },
+    {
+      "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
+      "id": "nl.x-services.plugins.toast"
     }
   ],
   "cordovaPlatforms": [
