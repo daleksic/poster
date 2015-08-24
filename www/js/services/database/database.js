@@ -151,6 +151,58 @@ angular.module('starter.database', [])
       });
 
     },
+    userExists: function (email, password) {
+      var q = $q.defer();
+      var query = "SELECT * FROM user WHERE user_email = ? AND user_password = ?";
+      var userExists = false;
+      $cordovaSQLite.execute(this.getDatabase(), query, [email, password]).then(function(res) {
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.length + " USER");
+          userExists = true;
+          q.resolve(userExists);
+        } else {
+          console.log("No results found");
+          userExists = false;
+          q.resolve(userExists);
+        }
+      }, function (err) {
+        console.error(err);
+        q.resolve(err);
+      });
+      return q.promise;
+    },
+    findUserByEmail: function (email) {
+      var q = $q.defer();
+      var query = "SELECT * FROM user WHERE user_email = ?";
+      $cordovaSQLite.execute(this.getDatabase(), query, [email]).then(function(res) {
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.length + " USER");
+          q.resolve(res);
+        } else {
+          console.log("No results found");
+        }
+      }, function (err) {
+        console.error(err);
+        q.resolve(err);
+      });
+      return q.promise;
+    },
+    findUserById: function (userId) {
+      var q = $q.defer();
+      var query = "SELECT * FROM user WHERE user_id = ?";
+      $cordovaSQLite.execute(this.getDatabase(), query, [userId]).then(function(res) {
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.length + " USER");
+          q.resolve(res);
+        } else {
+          console.log("No results found");
+        }
+      }, function (err) {
+        console.error(err);
+        q.resolve(err);
+      });
+      return q.promise;
+    }
 
   };
 

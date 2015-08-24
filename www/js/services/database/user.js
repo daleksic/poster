@@ -1,6 +1,6 @@
 angular.module('starter.service.user', ['starter.database'])
 
-.factory('UserService', ['DatabaseService', function (DatabaseService) {
+.factory('UserService', ['$q', 'DatabaseService', function ($q, DatabaseService) {
 
   return {
 
@@ -9,20 +9,44 @@ angular.module('starter.service.user', ['starter.database'])
     },
 
     deleteUser: function(userId){
-    //  DatabaseService.deletetUser(userId);
+       //  delete user
     },
 
     updateUser: function (title, description, user_id) {
-
-
+      //  update user
     },
 
-    userExists: function(email){
-      //DatabaseService.deletetUser(userId);
+    userExists: function(email, password){
+      var q = $q.defer();
+      var response = '';
+      DatabaseService.userExists(email, password).then(function(result){
+        response = result;
+        q.resolve(response);
+      });
+      return q.promise;
     },
 
-    findUserById: function (albumId) {
-
+    findUserById: function (userId) {
+      var q = $q.defer();
+      var user = {};
+      DatabaseService.findUserById(userId).then(function(result){
+        user['id'] = result.rows.item(0).user_id;
+        user['fullname'] = result.rows.item(0).user_fullname;
+        user['email'] = result.rows.item(0).user_email;
+        q.resolve(user);
+      });
+      return q.promise;
+    },
+    findUserByEmail: function (email) {
+      var q = $q.defer();
+      var user = {};
+      DatabaseService.findUserByEmail(email).then(function(result){
+        user['id'] = result.rows.item(0).user_id;
+        user['fullname'] = result.rows.item(0).user_fullname;
+        user['email'] = result.rows.item(0).user_email;
+        q.resolve(user);
+      });
+      return q.promise;
     }
 
   };

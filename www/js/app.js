@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.register', 'starter.albums', 'starter.albumdetail', 'starter.imagedetail','starter.settings', 'starter.effect', 'starter.utils', 'starter.image', 'starter.service.user', 'starter.service.album', 'starter.service.image'])
+angular.module('starter', ['ionic', 'ngCordova','starter.login', 'starter.register', 'starter.albums', 'starter.albumdetail', 'starter.imagedetail','starter.settings', 'starter.effect', 'starter.utils', 'starter.image', 'starter.service.user', 'starter.service.album', 'starter.service.image', 'starter.menu', 'starter.preloading'])
 //, 'starter.image'
 .run(function($ionicPlatform, $cordovaSplashscreen, UtilsService, DatabaseService) {
 
@@ -39,6 +39,11 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.regis
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+  .state('preloading', {
+    url: "/preloading",
+    templateUrl: "templates/preloading.html",
+    controller: 'PreloadingCtrl'
+  })
   .state('login', {
     url: "/login",
     templateUrl: "templates/login.html",
@@ -101,5 +106,5 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.login', 'starter.regis
     }
   });
 
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/preloading');
 });

@@ -1,6 +1,6 @@
 angular.module('starter.login', [])
 
-.controller('LoginCtrl', function($scope, $ionicPopover, $state) {
+.controller('LoginCtrl', function($scope, $ionicPopover, $state, UtilsService, UserService) {
   $scope.errorMessage = "";
   $scope.user = {
     email:"",
@@ -8,12 +8,21 @@ angular.module('starter.login', [])
   };
 
   $scope.login = function() {
-    if(true){
-      $state.go('app.albums');
-    }
+    UserService.userExists($scope.user.email, $scope.user.password).then(function(result){
+
+      if(result == true){
+          UserService.findUserByEmail($scope.user.email).then(function(user){
+            UtilsService.set('PosterActiveUser', user.id).then(function(response){
+              $scope.user.email = "";
+              $scope.user.password = "";
+              $state.go('app.albums');
+            });
+          });
+      }else{
+        // user don't exists toust
+      }
+    });
   };
-
-
 
   $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', {
     scope: $scope

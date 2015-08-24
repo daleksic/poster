@@ -6,6 +6,7 @@ angular.module('starter.albums', [])
   $scope.selectedAlbumIndex = '';
   $scope.errorMessage = "";
   $scope.modalType = "";
+  $scope.activeUserId = "";
 
   $scope.currentThemeBackgroundColor = '';
   $scope.currentThemeBorder = '';
@@ -40,8 +41,11 @@ angular.module('starter.albums', [])
       }
     });
 
-    AlbumService.findAlbumsByUserId(1).then(function(albums){
-      $scope.albums = albums;
+    UtilsService.get('PosterActiveUser').then(function(userId){
+      $scope.activeUserId = userId;
+      AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
+        $scope.albums = albums;
+      });
     });
 
   });
@@ -107,7 +111,7 @@ angular.module('starter.albums', [])
     if( $scope.modalType == 'update'){
       AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
     }else if($scope.modalType == 'add'){
-      AlbumService.addAlbum($scope.album.title, $scope.album.description, 1);
+      AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
 
     }
     $scope.album.title = '';
