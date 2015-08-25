@@ -1,6 +1,6 @@
 angular.module('starter.login', [])
 
-.controller('LoginCtrl', function($scope, $ionicPopover, $state, $cordovaToast, UtilsService, UserService) {
+.controller('LoginCtrl', function($scope, $ionicPopover, $state, $cordovaToast, UtilsService, UserService, ValidationService) {
   $scope.errorMessage = "";
   $scope.user = {
     email:"",

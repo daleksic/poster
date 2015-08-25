@@ -13,6 +13,7 @@ angular.module('starter.albums', [])
   $scope.currentThemeTextColor = '';
   $scope.currentThemeButton = '';
   $scope.Itemheight = $window.innerWidth /2;
+  $scope.hideActionSheet = '';
 
   $scope.album = {
     title:'',
@@ -83,9 +84,12 @@ angular.module('starter.albums', [])
       destructiveButtonClicked : function(){
         AlbumService.deleteAlbum($scope.selectedAlbumId);
         $scope.albums.splice($scope.selectedAlbumIndex, 1);
+        $scope.hideActionSheet();
         $cordovaToast.show('Album is deleted.', 'short', 'bottom');
       }
     });
+
+    $scope.hideActionSheet = hideSheet;
 
   };
 
@@ -111,13 +115,19 @@ angular.module('starter.albums', [])
     if( $scope.modalType == 'update'){
       AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
       $cordovaToast.show('Album is updated.', 'short', 'bottom');
+      $scope.modalUpdateAddAlbum.hide();
     }else if($scope.modalType == 'add'){
       AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
       $cordovaToast.show('New album is added.', 'short', 'bottom');
+      AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
+        $scope.albums = [];
+        $scope.albums = albums;
+        $scope.modalUpdateAddAlbum.hide();
+      });
     }
     $scope.album.title = '';
     $scope.album.description = '';
-    $scope.modalUpdateAddAlbum.hide();
+
   };
 
   //Cleanup the modal when we're done with it!

@@ -85,12 +85,13 @@ angular.module('starter.effect', [])
 
         var img = $scope.canvas.toDataURL("image/jpeg");
         var data = img.replace(/^data:image\/\w+;base64,/, "");
-        var name =  $scope.image.imageTitle + '_' + makeid() + '.jpg';
+      //  var name =  $scope.image.imageTitle + '_' + makeid() + '.jpg';
+      var name =  $scope.image.imageTitle + '.jpg';
         var fileName, uri = '';
         $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
           fileName = result.name;
           uri = result.nativeURL;
-          $cordovaFile.writeFile(cordova.file.externalDataDirectory, name, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
+          $cordovaFile.writeFile(cordova.file.externalDataDirectory, fileName, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
             console.log(writeResult);
             var width = $scope.canvas.width;
             var height = $scope.canvas.height;

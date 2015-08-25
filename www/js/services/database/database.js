@@ -84,7 +84,7 @@ angular.module('starter.database', [])
       return q.promise;
     },
 
-    insertImage: function (title, location, uri, width, height, contentType, albumId) {
+    insertImage: function (title,location, uri, width, height, contentType, albumId) {
       var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, image_content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date()+'', width, height, contentType, new Date()+'', albumId]).then(function(res) {                 // potrebno formatiranje datuma
 
@@ -106,7 +106,7 @@ angular.module('starter.database', [])
     },
     findImageById: function (imageId) {
       var q = $q.defer();
-      var query = "SELECT image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id FROM image WHERE image_id = ?";
+      var query = "SELECT * FROM image WHERE image_id = ?";
       $cordovaSQLite.execute(this.getDatabase(), query, [imageId]).then(function(res) {
         if(res.rows.length > 0) {
           console.log("SELECTED -> ");

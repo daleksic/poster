@@ -37,7 +37,7 @@ angular.module('starter.service.image', ['starter.database'])
           image['title'] = result.rows.item(i).image_title;
           image['location'] = result.rows.item(i).image_location;
           image['uri'] = result.rows.item(i).image_uri;
-          image['date_created'] = result.rows.item(i).image_date_created;  
+          image['date_created'] = result.rows.item(i).image_date_created;
           images.push(image);
        }
        q.resolve(images);
