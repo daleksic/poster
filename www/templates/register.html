@@ -8,24 +8,24 @@
     <form>
       <div class="list">
 
-        <div class="item item-input " style="overflow: inherit; z-index: 90;" on-touch="openPopover($event, 'Full name is not valid')">
-          <input type="text" placeholder="Full name" ng-model="user.fullName">
+        <div class="item item-input " style="overflow: inherit; z-index: 90;" on-touch="openPopover($event, fullnameMessage, 'fullname')">
+          <input type="text" placeholder="Full name" ng-model="user.fullName" ng-change="validateFullName()">
           <div >
-            <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+            <i ng-show="fullnameErrorShow" class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
           </div>
         </div>
 
-        <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Email is not valid')">
-          <input type="text" placeholder="Email" ng-model="user.email">
+        <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, emailMessage, 'email')">
+          <input type="email" placeholder="Email" ng-model="user.email" ng-change="validateEmail()">
           <div >
-            <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+            <i ng-show="emailErrorShow" class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
           </div>
         </div>
 
-        <div class="item item-input" style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Password must be 8 characters!')">
-          <input type="text" placeholder="Password" ng-model="user.password" >
+        <div class="item item-input" style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, passwordMessage, 'password')">
+          <input type="password" placeholder="Password" ng-model="user.password" ng-change="validatePassword()">
           <div>
-            <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+            <i ng-show="passwordErrorShow" class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
           </div>
         </div>
 
