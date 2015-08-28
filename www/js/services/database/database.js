@@ -23,7 +23,7 @@ angular.module('starter.database', [])
     insertAlbum: function (title, description, user_id) {
 
       var query = "INSERT INTO album (album_title, album_description, album_last_time_modified, album_user_id) VALUES ( ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, description,new Date(), user_id]).then(function(res) {                 // potrebno formatiranje datuma
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, this.formatDate(new Date()), user_id]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -33,7 +33,7 @@ angular.module('starter.database', [])
 
     updateAlbum: function (title, description, albumId) {
       var query = "UPDATE  album SET album_title = ?, album_description = ?, album_last_time_modified = ? WHERE album_id = ?";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, description,new Date() + '', albumId]).then(function(res) {                 // potrebno formatiranje datuma
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, this.formatDate(new Date()), albumId]).then(function(res) {
         console.log("UPDATED ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -107,7 +107,7 @@ angular.module('starter.database', [])
 
     insertImage: function (title,location, uri, width, height, contentType, albumId) {
       var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, image_content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date()+'', width, height, contentType, new Date()+'', albumId]).then(function(res) {                 // potrebno formatiranje datuma
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  this.formatDate(new Date()), width, height, contentType, this.formatDate(new Date()), albumId]).then(function(res) {
 
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
@@ -131,8 +131,6 @@ angular.module('starter.database', [])
       $cordovaSQLite.execute(this.getDatabase(), query, [imageId]).then(function(res) {
         if(res.rows.length > 0) {
           console.log("SELECTED -> ");
-          //  console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
-
           q.resolve(res);
         } else {
           console.log("No results found");
@@ -150,8 +148,6 @@ angular.module('starter.database', [])
       $cordovaSQLite.execute(this.getDatabase(), query, [albumId]).then(function(res) {
         if(res.rows.length > 0) {
           console.log("SELECTED -> " + res.rows.length + " IMAGES");
-          //console.log("SELECTED -> " + res.rows.item(0).firstname + " " + res.rows.item(0).lastname);
-// image_id, image_title, image_location, image_uri, image_date_created, image_width, image_height, content_type, image_last_time_modified, image_album_id
           q.resolve(res);
         } else {
           console.log("No results found");
@@ -187,7 +183,7 @@ angular.module('starter.database', [])
     insertUser: function (fullName, email, password) {
 
       var query = "INSERT INTO user (user_fullname, user_email, user_password, user_last_time_modified) VALUES ( ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [fullName, email, password, new Date() + '']).then(function(res) {                 // potrebno formatiranje datuma
+      $cordovaSQLite.execute(this.getDatabase(), query, [fullName, email, password, this.formatDate(new Date())]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -245,6 +241,13 @@ angular.module('starter.database', [])
         q.resolve(err);
       });
       return q.promise;
+    },
+    formatDate: function(dateObj){
+      var year = dateObj.getFullYear();
+      var month = dateObj.getMonth() + 1;
+      var date = dateObj.getDate();
+
+      return date + '/' + month + '/' + year;
     }
 
   };
