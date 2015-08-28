@@ -23,13 +23,13 @@ angular.module('starter.validation', [])
        return false;
      },
      validateTitle: function(title) {
-        if(title.length > 20)
+        if(title.length < 20)
           return true;
 
         return false;
       },
       validateDescription: function(desc) {
-        if(desc.length > 100)
+        if(desc.length < 50)
           return true;
 
         return false;

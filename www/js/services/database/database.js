@@ -84,6 +84,27 @@ angular.module('starter.database', [])
       return q.promise;
     },
 
+    albumExists: function (title) {
+      var q = $q.defer();
+      var query = "SELECT * FROM album WHERE album_title = ?";
+      var albumExists = false;
+      $cordovaSQLite.execute(this.getDatabase(), query, [title]).then(function(res) {
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.length + " ALBUM");
+          albumExists = true;
+          q.resolve(albumExists);
+        } else {
+          console.log("No results found");
+          albumExists = false;
+          q.resolve(albumExists);
+        }
+      }, function (err) {
+        console.error(err);
+        q.resolve(err);
+      });
+      return q.promise;
+    },
+
     insertImage: function (title,location, uri, width, height, contentType, albumId) {
       var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, image_content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date()+'', width, height, contentType, new Date()+'', albumId]).then(function(res) {                 // potrebno formatiranje datuma
@@ -141,6 +162,28 @@ angular.module('starter.database', [])
       });
       return q.promise;
     },
+
+    imageExists: function (title) {
+      var q = $q.defer();
+      var query = "SELECT * FROM image WHERE image_title = ?";
+      var imageExists = false;
+      $cordovaSQLite.execute(this.getDatabase(), query, [title]).then(function(res) {
+        if(res.rows.length > 0) {
+          console.log("SELECTED -> " + res.rows.length + " IMAGE");
+          imageExists = true;
+          q.resolve(imageExists);
+        } else {
+          console.log("No results found");
+          imageExists = false;
+          q.resolve(imageExists);
+        }
+      }, function (err) {
+        console.error(err);
+        q.resolve(err);
+      });
+      return q.promise;
+    },
+
     insertUser: function (fullName, email, password) {
 
       var query = "INSERT INTO user (user_fullname, user_email, user_password, user_last_time_modified) VALUES ( ?, ?, ?, ?)";

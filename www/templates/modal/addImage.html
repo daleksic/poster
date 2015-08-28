@@ -1,13 +1,13 @@
 <ion-modal-view>
   <ion-header-bar class="bar-positive">
-    <h1 class="title">Add image</h1>
+    <h1 class="title">Add photo</h1>
   </ion-header-bar>
   <ion-content class="padding-left padding-right" ng-class="currentThemeBackgroundColor">
     <div class="list">
-      <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, 'Title is not valid!')">
-        <input type="text" placeholder="Title" ng-model="image.imageTitle">
+      <div class="item item-input " style="overflow: inherit; z-index: 90; margin-top: 20px;" on-touch="openPopover($event, imageMessage)">
+        <input type="text" placeholder="Title" ng-model="image.imageTitle" ng-change="validateTitle()">
         <div >
-          <i class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
+          <i ng-show="imageErrorShow" class="block assertive-bg text-center light" style="width: 20px; height: 20px; border-radius: 50%; margin-right: 5px;" ><b>!</b></i>
         </div>
 
       </div>

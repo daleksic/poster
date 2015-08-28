@@ -81,7 +81,7 @@ angular.module('starter.albumdetail', [])
             ImageService.deleteImage($scope.selectedImage);
             $scope.album.images.splice($scope.selectedImageIndex, 1);
             $scope.hideActionSheet();
-            $cordovaToast.show('Image is deleted', 'short', 'bottom');
+            $cordovaToast.show('Photo is deleted', 'short', 'bottom');
           });
         });
       }

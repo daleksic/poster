@@ -1,11 +1,12 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService) {
+.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService, ValidationService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
   $scope.errorMessage = "";
   $scope.modalType = "";
+  $scope.modalTypeTitle = "";
   $scope.activeUserId = "";
 
   $scope.currentThemeBackgroundColor = '';
@@ -14,6 +15,11 @@ angular.module('starter.albums', [])
   $scope.currentThemeButton = '';
   $scope.Itemheight = $window.innerWidth /2;
   $scope.hideActionSheet = '';
+
+  $scope.titleMessage = '';
+  $scope.descriptionMessage = '';
+  $scope.titleErrorShow = false;
+  $scope.descriptionErrorShow = false;
 
   $scope.album = {
     title:'',
@@ -75,8 +81,7 @@ angular.module('starter.albums', [])
         // add cancel code..
       },
       buttonClicked: function(index) {
-        if(index == 0){
-          //$scope.openModalUpdateAddAlbum();
+        if(index == 0){        
           $scope.openModalUpdateAddAlbum('update');
         }
         return true;
@@ -102,8 +107,11 @@ angular.module('starter.albums', [])
   $scope.openModalUpdateAddAlbum = function(type) {
     $scope.modalType = type;
     if(type == 'update'){
+      $scope.modalTypeTitle = 'Edit';
       $scope.album.title = $scope.albums[$scope.selectedAlbumIndex].title;
       $scope.album.description = $scope.albums[$scope.selectedAlbumIndex].description;
+    }else{
+      $scope.modalTypeTitle = 'Add';
     }
     //alert('Add album');
     $scope.modalUpdateAddAlbum.show();
@@ -112,22 +120,53 @@ angular.module('starter.albums', [])
     $scope.modalUpdateAddAlbum.hide();
   };
   $scope.addUpdateAlbum = function() {
-    if( $scope.modalType == 'update'){
-      AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
-      $cordovaToast.show('Album is updated.', 'short', 'bottom');
-      $scope.modalUpdateAddAlbum.hide();
-    }else if($scope.modalType == 'add'){
-      AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
-      $cordovaToast.show('New album is added.', 'short', 'bottom');
-      AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
-        $scope.albums = [];
-        $scope.albums = albums;
-        $scope.modalUpdateAddAlbum.hide();
-      });
-    }
-    $scope.album.title = '';
-    $scope.album.description = '';
+    var titleEmpty = ValidationService.isEditTextEmpty($scope.album.title);
+    var descriptionEmpty = ValidationService.isEditTextEmpty($scope.album.description);
 
+    if( titleEmpty == true && descriptionEmpty == true){
+      $scope.titleMessage = "Title mustn't be empty!";
+      $scope.titleErrorShow = true;
+      $scope.descriptionMessage = "Description mustn't be empty!";
+      $scope.descriptionErrorShow = true;
+
+    }else if(titleEmpty == true){
+      $scope.titleMessage = "Title mustn't be empty!";
+      $scope.titleErrorShow = true;
+    }else if( descriptionEmpty == true){
+      $scope.descriptionMessage = "Description mustn't be empty!";
+      $scope.descriptionErrorShow = true;
+    }else if(titleEmpty == false && descriptionEmpty == false && $scope.titleErrorShow  == false &&   $scope.descriptionErrorShow == false){
+
+      if( $scope.modalType == 'update'){
+            AlbumService.updateAlbum($scope.album.title, $scope.album.description, $scope.selectedAlbumId);
+            $cordovaToast.show('Album is updated.', 'short', 'bottom');
+            AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
+              $scope.albums = [];
+              $scope.albums = albums;
+              $scope.modalUpdateAddAlbum.hide();
+
+              $scope.album.title = '';
+              $scope.album.description = '';
+            });
+      }else if($scope.modalType == 'add'){
+        AlbumService.albumExists($scope.album.title).then(function(result){
+          if(result == false){
+            AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
+            $cordovaToast.show('New album is added.', 'short', 'bottom');
+            AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
+              $scope.albums = [];
+              $scope.albums = albums;
+              $scope.modalUpdateAddAlbum.hide();
+
+              $scope.album.title = '';
+              $scope.album.description = '';
+            });
+          }else{
+            $cordovaToast.show("Album already exists!", 'long', 'bottom');
+          }
+        });
+      }
+    }
   };
 
   //Cleanup the modal when we're done with it!
@@ -143,6 +182,31 @@ angular.module('starter.albums', [])
     // Execute action
   });
 
+  $scope.validateTitle = function(){
+    var valid = ValidationService.validateTitle($scope.album.title);
+    if(valid == false){
+      $scope.titleMessage = 'Title must be less than 8 characters long!';
+      $scope.titleErrorShow = true;
+    }else{
+      $scope.titleMessage = '';
+      $scope.titleErrorShow = false;
+      $scope.closePopover();
+    }
+
+  };
+
+  $scope.validateDescription = function(){
+    var valid = ValidationService.validateDescription($scope.album.description);
+    if(valid == false){
+      $scope.descriptionMessage = 'Description must be less than 50 characters long!';
+      $scope.descriptionErrorShow = true;
+    }else{
+      $scope.descriptionMessage = '';
+      $scope.descriptionErrorShow = false;
+      $scope.closePopover();
+    }
+  };
+
 
   $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/
     scope: $scope
@@ -150,9 +214,18 @@ angular.module('starter.albums', [])
     $scope.popover = popover;
   });
 
-  $scope.openPopover = function($event, message) {
-    $scope.popover.show($event);
-    $scope.errorMessage = message;
+  $scope.openPopover = function($event, message, type) {
+    if(type == 'title'){
+      if($scope.titleErrorShow == true){
+        $scope.popover.show($event);
+        $scope.errorMessage = message;
+      }
+    }else if(type == 'description'){
+      if($scope.descriptionErrorShow == true){
+        $scope.popover.show($event);
+        $scope.errorMessage = message;
+      }
+    }
   };
 
   $scope.closePopover = function() {

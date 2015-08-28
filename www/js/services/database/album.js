@@ -17,6 +17,16 @@ angular.module('starter.service.album', ['starter.database'])
       DatabaseService.updateAlbum(title, description, albumId);
     },
 
+    albumExists: function(title){
+      var q = $q.defer();
+      var response = '';
+      DatabaseService.albumExists(title).then(function(result){
+        response = result;
+        q.resolve(response);
+      });
+      return q.promise;
+    },
+
     findAlbumById: function (albumId) {
       var q = $q.defer();
       var album = {};

@@ -12,6 +12,16 @@ angular.module('starter.service.image', ['starter.database'])
       DatabaseService.deleteImage(albumId);
     },
 
+    imageExists: function(title){
+      var q = $q.defer();
+      var response = '';
+      DatabaseService.imageExists(title).then(function(result){
+        response = result;
+        q.resolve(response);
+      });
+      return q.promise;
+    },
+
     findImageById: function (imageId) {
       var q = $q.defer();
       var image = {};

@@ -1,6 +1,6 @@
 angular.module('starter.effect', [])
 
-.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicPopover, $cordovaToast, ImageEffect, UtilsService, ImageService) {
+.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicLoading, $ionicPopover, $cordovaToast, ImageEffect, UtilsService, ImageService, ValidationService) {
 
     $scope.height = $window.innerHeight - 45;
     $scope.selectedColor = '';
@@ -20,6 +20,9 @@ angular.module('starter.effect', [])
     $scope.currentThemeTextColor = '';
     $scope.currentThemeButton = '';
 
+    $scope.imageMessage = '';
+    $scope.imageErrorShow = false;
+
     $scope.selectColor = function(name){
       $scope.selectedColor = name;
     };
@@ -34,12 +37,14 @@ angular.module('starter.effect', [])
     };
 
     $scope.$on('$ionicView.beforeEnter', function(){
-
+      $ionicLoading.show({
+        template: '  Loading...  '
+      });
       $cordovaCamera.getPicture(options).then(function(imageData) {
 
         $scope.imageCaptured =  "data:image/jpeg;base64," + imageData;
         $scope.imageData = imageData;
-
+        $ionicLoading.hide();
       }, function(err) {
         // error
       });
@@ -82,34 +87,64 @@ angular.module('starter.effect', [])
       $scope.modalAddImage.hide();
     };
     $scope.addImage = function() {
-
-        var img = $scope.canvas.toDataURL("image/jpeg");
-        var data = img.replace(/^data:image\/\w+;base64,/, "");
+      var titleEmpty = ValidationService.isEditTextEmpty($scope.image.imageTitle);
+      var img = $scope.canvas.toDataURL("image/jpeg");
+      var data = img.replace(/^data:image\/\w+;base64,/, "");
       //  var name =  $scope.image.imageTitle + '_' + makeid() + '.jpg';
       var name =  $scope.image.imageTitle + '.jpg';
-        var fileName, uri = '';
-        $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
-          fileName = result.name;
-          uri = result.nativeURL;
-          $cordovaFile.writeFile(cordova.file.externalDataDirectory, fileName, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
-            console.log(writeResult);
-            var width = $scope.canvas.width;
-            var height = $scope.canvas.height;
-            var album = $stateParams.albumId;
-            ImageService.addImage($scope.image.imageTitle, 'No location', uri, width, height, 'image/jpeg', album);
-            $cordovaToast.show('New image is added.', 'short', 'bottom');
-            $state.go('app.albumDetail', {albumId: $stateParams.albumId});
-          });
-        });
+      var fileName, uri = '';
 
-        $scope.title = '';
-        $scope.modalAddImage.hide();
+      if(titleEmpty == true){
+        $scope.imageMessage = "Title mustn't be empty!";
+        $scope.imageErrorShow = true;
+      }else if(titleEmpty == false && $scope.imageErrorShow == false){
+        ImageService.imageExists($scope.image.imageTitle).then(function(result){
+          if(result == false){
+            $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
+              fileName = result.name;
+              uri = result.nativeURL;
+              $cordovaFile.writeFile(cordova.file.externalDataDirectory, fileName, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
+                console.log(writeResult);
+                var width = $scope.canvas.width;
+                var height = $scope.canvas.height;
+                var album = $stateParams.albumId;
+                ImageService.addImage($scope.image.imageTitle, 'No location', uri, width, height, 'image/jpeg', album);
+                $cordovaToast.show('New photo is added.', 'short', 'bottom');
+                $state.go('app.albumDetail', {albumId: $stateParams.albumId});
+              });
+            });
+
+            $scope.title = '';
+            $scope.modalAddImage.hide();
+
+          }else{
+            // user don't exists toust
+            $cordovaToast.show("Photo already exists!", 'long', 'bottom');
+          }
+
+        });
+      }
+
     };
 
     //Cleanup the modal when we're done with it!
     $scope.$on('$destroy', function() {
       $scope.modalAddImage.remove();
     });
+
+
+    $scope.validateTitle = function(){
+      var valid = ValidationService.validateTitle($scope.image.imageTitle);
+      if(valid == false){
+        $scope.imageMessage = 'Title is not valid!';
+        $scope.imageErrorShow = true;
+      }else{
+        $scope.imageMessage = '';
+        $scope.imageErrorShow = false;
+        $scope.closePopover();
+      }
+
+    };
 
 
     $scope.init = function(imageData){
@@ -312,15 +347,17 @@ angular.module('starter.effect', [])
           }
         };
 
-        $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/
+        $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', {
             scope: $scope
           }).then(function(popover) {
             $scope.popover = popover;
           });
 
           $scope.openPopover = function($event, message) {
-            $scope.popover.show($event);
-            $scope.errorMessage = message;
+            if($scope.imageErrorShow == true){
+              $scope.popover.show($event);
+              $scope.errorMessage = message;
+            }
           };
 
           $scope.closePopover = function() {
