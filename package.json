@@ -48,6 +48,10 @@
     {
       "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
       "id": "nl.x-services.plugins.toast"
+    },
+    {
+      "locator": "https://github.com/apache/cordova-plugin-geolocation.git",
+      "id": "cordova-plugin-geolocation"
     }
   ],
   "cordovaPlatforms": [

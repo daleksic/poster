@@ -57,6 +57,14 @@
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -105,6 +113,9 @@
             "PACKAGE_NAME": "com.ionicframework.poster528203"
         },
         "nl.x-services.plugins.toast": {
+            "PACKAGE_NAME": "com.ionicframework.poster528203"
+        },
+        "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ionicframework.poster528203"
         }
     },

@@ -1,6 +1,6 @@
 angular.module('starter.effect', [])
 
-.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicLoading, $ionicPopover, $cordovaToast, ImageEffect, UtilsService, ImageService, ValidationService) {
+.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicLoading, $ionicPopover, $cordovaToast, $cordovaGeolocation, ImageEffect, UtilsService, ImageService, ValidationService, GeocodingService) {
 
     $scope.height = $window.innerHeight - 45;
     $scope.selectedColor = '';
@@ -22,6 +22,8 @@ angular.module('starter.effect', [])
 
     $scope.imageMessage = '';
     $scope.imageErrorShow = false;
+    $scope.userLocation = 'No location';
+    var geocoder;
 
     $scope.selectColor = function(name){
       $scope.selectedColor = name;
@@ -66,6 +68,14 @@ angular.module('starter.effect', [])
         }
       });
 
+      geocoder = new google.maps.Geocoder();
+
+    });
+
+    $scope.$on('$ionicView.enter', function(){
+      GeocodingService.getLocation(geocoder).then(function(result){
+        $scope.userLocation = result;
+      });
 
     });
 
@@ -108,7 +118,7 @@ angular.module('starter.effect', [])
                 var width = $scope.canvas.width;
                 var height = $scope.canvas.height;
                 var album = $stateParams.albumId;
-                ImageService.addImage($scope.image.imageTitle, 'No location', uri, width, height, 'image/jpeg', album);
+                ImageService.addImage($scope.image.imageTitle, $scope.userLocation, uri, width, height, 'image/jpeg', album);
                 $cordovaToast.show('New photo is added.', 'short', 'bottom');
                 $state.go('app.albumDetail', {albumId: $stateParams.albumId});
               });
