@@ -119,7 +119,7 @@ angular.module('starter.effect', [])
                 var height = $scope.canvas.height;
                 var album = $stateParams.albumId;
                 ImageService.addImage($scope.image.imageTitle, $scope.userLocation, uri, width, height, 'image/jpeg', album);
-                $cordovaToast.show('New photo is added.', 'short', 'bottom');
+                $cordovaToast.show('New photo is created.', 'short', 'bottom');
                 $state.go('app.albumDetail', {albumId: $stateParams.albumId});
               });
             });

@@ -123,8 +123,18 @@ angular.module('starter.database', [])
       }, function (err) {
         console.error(err);
       });
+    },
+    
+    deleteImagesByAlbumId: function (albumId) {
+      var query = "DELETE FROM image WHERE image_album_id = ?";
+      $cordovaSQLite.execute(this.getDatabase(), query, [albumId]).then(function(res) {
+        console.log("DELETED ID -> " + res.insertId);
+      }, function (err) {
+        console.error(err);
+      });
 
     },
+    
     findImageById: function (imageId) {
       var q = $q.defer();
       var query = "SELECT * FROM image WHERE image_id = ?";

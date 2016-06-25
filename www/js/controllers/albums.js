@@ -1,6 +1,6 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($window, $scope, $q, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService, ValidationService, ImageService) {
+.controller('AlbumsCtrl', function($window, $scope, $q, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, $cordovaFile, UtilsService, AlbumService, ValidationService, ImageService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
@@ -104,10 +104,15 @@ angular.module('starter.albums', [])
         return true;
       },
       destructiveButtonClicked : function(){
-        AlbumService.deleteAlbum($scope.selectedAlbumId);
-        $scope.albums.splice($scope.selectedAlbumIndex, 1);
-        $scope.hideActionSheet();
-        $cordovaToast.show('Album is deleted.', 'short', 'bottom');
+        ImageService.findImagesByAlbumId($scope.selectedAlbumId).then(function(images){
+            var files = [];
+            files = images;
+            $scope.deleteFiles(files);
+            AlbumService.deleteAlbum($scope.selectedAlbumId);
+            $scope.albums.splice($scope.selectedAlbumIndex, 1);
+            $scope.hideActionSheet();
+            $cordovaToast.show('Album is deleted.', 'short', 'bottom');        
+        });
       }
     });
 
@@ -160,6 +165,7 @@ angular.module('starter.albums', [])
             AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
               $scope.albums = [];
               $scope.albums = albums;
+              $scope.updateAlbumsImage();
               $scope.modalUpdateAddAlbum.hide();
 
               $scope.album.title = '';
@@ -169,7 +175,7 @@ angular.module('starter.albums', [])
         AlbumService.albumExists($scope.album.title).then(function(result){
           if(result == false){
             AlbumService.addAlbum($scope.album.title, $scope.album.description, $scope.activeUserId);
-            $cordovaToast.show('New album is added.', 'short', 'bottom');
+            $cordovaToast.show('New album is created.', 'short', 'bottom');
             AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
               $scope.albums = [];
               $scope.albums = albums;
@@ -224,6 +230,14 @@ angular.module('starter.albums', [])
     }
   };
 
+    $scope.deleteFiles = function(images){
+        angular.forEach(images, function (image, key) {
+            $cordovaFile.removeFile(cordova.file.externalDataDirectory, image.title + '.jpg').then(function(result){
+               ImageService.deleteImage(image.id);
+                    
+             });
+        });
+    }
 
   $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/
     scope: $scope

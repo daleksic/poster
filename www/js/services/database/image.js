@@ -8,8 +8,12 @@ angular.module('starter.service.image', ['starter.database'])
       DatabaseService.insertImage(title, location, uri, width, height, contentType, albumId);
     },
 
-    deleteImage: function(albumId){
-      DatabaseService.deleteImage(albumId);
+    deleteImage: function(imageId){
+      DatabaseService.deleteImage(imageId);
+    },
+    
+    deleteImagesByAlbumId: function(albumId){
+      DatabaseService.deleteImagesByAlbumId(albumId);
     },
 
     imageExists: function(title){
