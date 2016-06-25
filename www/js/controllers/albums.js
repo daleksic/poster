@@ -1,6 +1,6 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService, ValidationService, ImageService) {
+.controller('AlbumsCtrl', function($window, $scope, $q, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, UtilsService, AlbumService, ValidationService, ImageService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
@@ -58,16 +58,20 @@ angular.module('starter.albums', [])
 
   });
   
-  $scope.updateAlbumsImage = function() {
-      
-      for(var i = 0; i < $scope.albums.length; i++) {
-        var album = $scope.albums[i];
-        ImageService.findImagesByAlbumId(album.id).then(function(images){
-            if(images.length > 0) {
-                album.image = images[0].uri;
-            }           
+    $scope.updateAlbumsImage = function() {
+     
+        var promise = $q.all([]);
+        
+        angular.forEach($scope.albums, function (album, key) {
+           promise = ImageService.findImagesByAlbumId(album.id).then(function(images){
+                 if(images.length > 0) {
+                      album.image = images[0].uri;
+                 }       
+             });
         });
-      }
+        promise.finally(function () {
+            console.log('Chain finished!');
+        });
   };
 
   $scope.onHold = function(id, index){
