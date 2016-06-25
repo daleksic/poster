@@ -1,6 +1,6 @@
 angular.module('starter.effect', [])
 
-.controller('EffectCtrl', function($scope, $ionicPopover, $state, $window, $document, $stateParams, $cordovaCamera, $cordovaFile, $ionicModal, $ionicLoading, $ionicPopover, $cordovaToast, $cordovaGeolocation, ImageEffect, UtilsService, ImageService, ValidationService, GeocodingService) {
+.controller('EffectCtrl', function($scope, $state, $window, $document, $stateParams, $ionicHistory, $cordovaCamera, $cordovaFile, $ionicModal, $ionicLoading, $ionicPopover, $cordovaToast, $cordovaGeolocation, ImageEffect, UtilsService, ImageService, ValidationService, GeocodingService) {
 
     $scope.height = $window.innerHeight - 45;
     $scope.selectedColor = '';
@@ -142,6 +142,9 @@ angular.module('starter.effect', [])
       $scope.modalAddImage.remove();
     });
 
+    $scope.closeEffectScreen = function() {
+      $ionicHistory.goBack();   
+    };
 
     $scope.validateTitle = function(){
       var valid = ValidationService.validateTitle($scope.image.imageTitle);
