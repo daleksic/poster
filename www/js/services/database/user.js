@@ -47,6 +47,20 @@ angular.module('starter.service.user', ['starter.database'])
         q.resolve(user);
       });
       return q.promise;
+    },
+    
+    findUserByIdForSync: function (userId) {
+      var q = $q.defer();
+      var user = {};
+      DatabaseService.findUserById(userId).then(function(result){
+        user['androidId'] = result.rows.item(0).user_id;
+        user['fullName'] = result.rows.item(0).user_fullname;
+        user['email'] = result.rows.item(0).user_email;
+        user['password'] = result.rows.item(0).user_password;
+        user['lastTimeModified'] = result.rows.item(0).user_last_time_modified;
+        q.resolve(user);
+      });
+      return q.promise;
     }
 
   };

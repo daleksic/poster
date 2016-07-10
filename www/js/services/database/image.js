@@ -1,6 +1,6 @@
 angular.module('starter.service.image', ['starter.database'])
 
-.factory('ImageService', ['$q', 'DatabaseService', function ($q, DatabaseService) {
+.factory('ImageService', ['$q', 'DatabaseService', '$cordovaToast', function ($q, DatabaseService, $cordovaToast) {
 
   return {
 
@@ -52,6 +52,30 @@ angular.module('starter.service.image', ['starter.database'])
           image['location'] = result.rows.item(i).image_location;
           image['uri'] = result.rows.item(i).image_uri;
           image['date_created'] = result.rows.item(i).image_date_created;
+          images.push(image);
+       }
+       q.resolve(images);
+
+     });
+     return q.promise;
+   },
+   
+   findImagesByAlbumIdForSync: function (albumId) {
+      var q = $q.defer();
+      var images = [];
+      DatabaseService.findImagesByAlbumId(albumId).then(function(result){
+        for(var i=0; i < result.rows.length; i++){
+          var image = {};
+          image['androidId'] = result.rows.item(i).image_id;
+          image['title'] = result.rows.item(i).image_title;
+          image['location'] = result.rows.item(i).image_location;
+          image['uri'] = result.rows.item(i).image_uri;
+          image['dateCreated'] = result.rows.item(i).image_date_created;
+          image['contentType'] = result.rows.item(i).image_content_type;
+          image['width'] = result.rows.item(i).image_width;
+          image['height'] = result.rows.item(i).image_height;
+          image['lastTimeModified'] = result.rows.item(i).image_last_time_modified;
+          
           images.push(image);
        }
        q.resolve(images);

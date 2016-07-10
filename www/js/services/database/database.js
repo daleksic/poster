@@ -23,7 +23,7 @@ angular.module('starter.database', [])
     insertAlbum: function (title, description, user_id) {
 
       var query = "INSERT INTO album (album_title, album_description, album_last_time_modified, album_user_id) VALUES ( ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, this.formatDate(new Date()), user_id]).then(function(res) {
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, new Date().toLocaleString(), user_id]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -33,7 +33,7 @@ angular.module('starter.database', [])
 
     updateAlbum: function (title, description, albumId) {
       var query = "UPDATE  album SET album_title = ?, album_description = ?, album_last_time_modified = ? WHERE album_id = ?";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, this.formatDate(new Date()), albumId]).then(function(res) {
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, description, new Date().toLocaleString(), albumId]).then(function(res) {
         console.log("UPDATED ID -> " + res.insertId);
       }, function (err) {
         console.error(err);
@@ -68,7 +68,7 @@ angular.module('starter.database', [])
     },
     findAlbumsByUserId: function (userId) {
       var q = $q.defer();
-      var query = "SELECT album_id, album_title, album_description, album_user_id FROM album WHERE album_user_id = ?";
+      var query = "SELECT album_id, album_title, album_description, album_last_time_modified, album_user_id FROM album WHERE album_user_id = ?";
       $cordovaSQLite.execute(this.getDatabase(), query, [userId]).then(function(res) {
         if(res.rows.length > 0) {
           console.log("SELECTED -> " + res.rows.length + " ALBUMS");
@@ -107,7 +107,7 @@ angular.module('starter.database', [])
 
     insertImage: function (title,location, uri, width, height, contentType, albumId) {
       var query = "INSERT INTO image (image_title, image_location, image_uri, image_date_created, image_width, image_height, image_content_type, image_last_time_modified, image_album_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  this.formatDate(new Date()), width, height, contentType, this.formatDate(new Date()), albumId]).then(function(res) {
+      $cordovaSQLite.execute(this.getDatabase(), query, [title, location, uri,  new Date().toLocaleString(), width, height, contentType, this.formatDate(new Date()), albumId]).then(function(res) {
 
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
@@ -193,7 +193,7 @@ angular.module('starter.database', [])
     insertUser: function (fullName, email, password) {
 
       var query = "INSERT INTO user (user_fullname, user_email, user_password, user_last_time_modified) VALUES ( ?, ?, ?, ?)";
-      $cordovaSQLite.execute(this.getDatabase(), query, [fullName, email, password, this.formatDate(new Date())]).then(function(res) {
+      $cordovaSQLite.execute(this.getDatabase(), query, [fullName, email, password, new Date().toLocaleString()]).then(function(res) {
         console.log("INSERT ID -> " + res.insertId);
       }, function (err) {
         console.error(err);

@@ -112,10 +112,22 @@ angular.module('starter.settings', [])
   }).then(function(modal) {
     $scope.modalSyncDataTime = modal;
   });
+  
   $scope.openModalmodalSyncDataTime = function() {
-    $scope.modalSyncDataTime.show();
+      UtilsService.get('SyncDataTime').then(function(value){
+      if(value != undefined){
+          $scope.syncDataTime =  value;
+      }
+      $scope.modalSyncDataTime.show();
+    });
   };
+  
   $scope.closeModalmodalSyncDataTime = function() {
+    $scope.modalSyncDataTime.hide();
+  };
+  
+  $scope.saveSyncDataTime = function () {
+    UtilsService.set('SyncDataTime', $scope.syncDataTime);
     $scope.modalSyncDataTime.hide();
   };
 

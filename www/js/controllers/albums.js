@@ -1,6 +1,6 @@
 angular.module('starter.albums', [])
 
-.controller('AlbumsCtrl', function($window, $scope, $q, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, $cordovaFile, UtilsService, AlbumService, ValidationService, ImageService) {
+.controller('AlbumsCtrl', function($window, $scope, $q, $state, $ionicActionSheet, $ionicModal, $ionicPopover, $cordovaToast, $cordovaFile, $interval, UtilsService, AlbumService, ValidationService, ImageService, SyncService) {
 
   $scope.selectedAlbumId = '';
   $scope.selectedAlbumIndex = '';
@@ -50,10 +50,15 @@ angular.module('starter.albums', [])
 
     UtilsService.get('PosterActiveUser').then(function(userId){
       $scope.activeUserId = userId;
-      AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
-        $scope.albums = albums;
-        $scope.updateAlbumsImage();
-      });
+        UtilsService.get('SyncDataTime').then(function(syncTime){
+           SyncService.syncData($scope.activeUserId);
+           $interval(function () {SyncService.syncData($scope.activeUserId); }, syncTime*60000); // minute * 60000
+           
+            AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
+                $scope.albums = albums;
+                $scope.updateAlbumsImage();
+             });
+         });        
     });
 
   });
@@ -189,6 +194,7 @@ angular.module('starter.albums', [])
           }
         });
       }
+      $scope.updateAlbumsImage();
     }
   };
 
