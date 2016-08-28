@@ -17,10 +17,18 @@ angular.module('starter.sync', [])
 
     listUsers: function () {  
         GApi.execute('posterendpoint', 'listUser').then( function(resp) {
-            $cordovaToast.show('Users: ' + resp.items.length, 'long', 'center');
+            console.log('List users ' + resp);
         }, function() {
-             $cordovaToast.show('error :(', 'long', 'bottom');
+           console.log('Error: failed to list users');
         });
+    },
+    
+    updateUser: function (user, albums) {
+         GApi.execute('posterendpoint', 'updateUser', {key: user.key, androidId: user.androidId, fullName:user.fullName, email:user.email, password:user.password, lastTimeModified:user.lastTimeModified, albums:albums}).then( function(resp) {
+            console.log('Update user: ' + resp);
+        }, function() {           
+            console.log('Error: failed to update user');
+        });     
     },
     
     syncData: function (userId) {      
@@ -33,6 +41,11 @@ angular.module('starter.sync', [])
              if(JSON.stringify(userDatastore.result)!="{}") {//userDatastore.result != '' && userDatastore != undefined) {
                  // update user
                   $cordovaToast.show('User: ' + JSON.stringify(userDatastore), 'long', 'center');
+                  AlbumService.findAlbumsByUserIdForSync(userId).then(function(albumsLocal) {
+
+                        this.syncAlbums(albumsLocal, userDatastore);  
+                                             
+                  }); 
              }else{
                  // insert user 
                   UserService.findUserByIdForSync(userId).then(function(userLocal) {
@@ -51,7 +64,62 @@ angular.module('starter.sync', [])
         }, function() {
              $cordovaToast.show('error :(', 'long', 'bottom');
         });
-    }
+    },
+    
+    syncAlbums: function (albumsLocal, userDatastore) {
+        
+        var albumsLocalMap = {};
+        var albumsDatastoreMap = {};
+        
+        for (var i = 0; i < userDatastore.albums.length; i++) {         
+            albumsDatastoreMap[userDatastore.albums[i].androidId] = userDatastore.albums[i];
+        }
+        for (var i = 0; i < albumsLocal.length; i++) {         
+            albumsLocalMap[albumsLocal[i].androidId] = albumsLocal[i];
+        }
+        
+        if (userDatastore.albums.length > 0 && albumsLocal.length > 0) {
+            
+            for (var n = 0; n < albumsLocal.length; n++) {
+                if(albumsDatastoreMap[albumsLocal[n].androidId] != undefined) {
+                    var albumDatastore = albumsDatastoreMap[albumsLocal[n].androidId];
+                    if(albumsLocal[n].lastTimeModified != albumDatastore.lastTimeModified) {
+                        albumDatastore.title = albumsLocal[n].title;
+                        albumDatastore.description = albumsLocal[n].description;
+                        albumDatastore.lastTimeModified = albumsLocal[n].lastTimeModified;
+                    }
+                    
+                } else {
+                    
+                    userDatastore.albums.push(albumsLocal[n]);
+                }
+            } 
+            
+            for (var n = 0; n < userDatastore.albums.length; n++) {
+                if(albumsLocalMap[userDatastore.albums[n].androidId] == undefined) {
+                    this.removeItem(userDatastore.albums, userDatastore.albums[n]);
+                    
+                }
+            }  
+             // update user
+            this.updateUser(userDatastore, userDatastore.albums);
+            
+        } else if (userDatastore.albums.length == 0 && albumsLocal.length > 0) {
+            // update user
+            this.updateUser(userDatastore, albumsLocal);
+        } else if (userDatastore.albums.length > 0 && albumsLocal.length == 0) {
+            // update user
+            this.updateUser(userDatastore, []);
+        } 
+    },
+    
+    removeItem: function(array, item) {
+      for(var i = array.length; i--;) {
+          if(array[i] === item) {
+              array.splice(i, 1);
+          }
+      }
+  }
 
   };
 

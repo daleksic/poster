@@ -112,7 +112,9 @@ angular.module('starter.albums', [])
         ImageService.findImagesByAlbumId($scope.selectedAlbumId).then(function(images){
             var files = [];
             files = images;
-            $scope.deleteFiles(files);
+            if(images.length > 0) {
+                $scope.deleteFiles(files);
+            }
             AlbumService.deleteAlbum($scope.selectedAlbumId);
             $scope.albums.splice($scope.selectedAlbumIndex, 1);
             $scope.hideActionSheet();
