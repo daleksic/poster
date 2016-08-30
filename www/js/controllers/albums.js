@@ -29,8 +29,7 @@ angular.module('starter.albums', [])
   $scope.albums = [];
 
   $scope.$on('$ionicView.beforeEnter', function(){
-    $scope.selectedAlbumId = '';
-    $scope.selectedAlbumIndex = '';
+    $scope.resetSelection();
     UtilsService.get('PosterTheme').then(function(value){
       var defaultTheme = 'light';
       if(value != undefined){
@@ -139,6 +138,8 @@ angular.module('starter.albums', [])
     $scope.modalUpdateAddAlbum.show();
   };
   $scope.closeModalUpdateAddAlbum = function() {
+    $scope.album.title = '';
+    $scope.album.description = '';
     $scope.modalUpdateAddAlbum.hide();
   };
   $scope.addUpdateAlbum = function() {
@@ -166,6 +167,7 @@ angular.module('starter.albums', [])
               $scope.albums = [];
               $scope.albums = albums;
               $scope.updateAlbumsImage();
+              $scope.resetSelection();
               $scope.modalUpdateAddAlbum.hide();
 
               $scope.album.title = '';
@@ -179,6 +181,8 @@ angular.module('starter.albums', [])
             AlbumService.findAlbumsByUserId($scope.activeUserId).then(function(albums){
               $scope.albums = [];
               $scope.albums = albums;
+              $scope.updateAlbumsImage();
+              $scope.resetSelection();
               $scope.modalUpdateAddAlbum.hide();
 
               $scope.album.title = '';
@@ -189,7 +193,7 @@ angular.module('starter.albums', [])
           }
         });
       }
-    }
+    }  
   };
 
   //Cleanup the modal when we're done with it!
@@ -204,6 +208,11 @@ angular.module('starter.albums', [])
   $scope.$on('modal.removed', function() {
     // Execute action
   });
+  
+  $scope.resetSelection = function() {
+    $scope.selectedAlbumId = '';
+    $scope.selectedAlbumIndex = '';    
+  };
 
   $scope.validateTitle = function(){
     var valid = ValidationService.validateTitle($scope.album.title);
