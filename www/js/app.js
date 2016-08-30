@@ -40,11 +40,13 @@ angular.module('starter', ['ionic', 'ngCordova','starter.login', 'starter.regist
   $stateProvider
 
   .state('preloading', {
+    cache: false,
     url: "/preloading",
     templateUrl: "templates/preloading.html",
     controller: 'PreloadingCtrl'
   })
   .state('login', {
+    cache: false,
     url: "/login",
     templateUrl: "templates/login.html",
     controller: 'LoginCtrl'

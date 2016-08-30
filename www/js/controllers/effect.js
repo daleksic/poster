@@ -111,11 +111,11 @@ angular.module('starter.effect', [])
       }else if(titleEmpty == false && $scope.imageErrorShow == false){
         ImageService.imageExists($scope.image.imageTitle).then(function(result){
           if(result == false){
-            $cordovaFile.createFile(cordova.file.externalRootDirectory, name, false).then(function(result){
+            $cordovaFile.createFile(cordova.file.externalDataDirectory, name, false).then(function(result){
               fileName = result.name;
               uri = result.nativeURL;
-              // sd card: externalRootDirectory, externalDataDirectory
-              $cordovaFile.writeFile(cordova.file.externalRootDirectory, fileName, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
+              // to save to sd card: externalRootDirectory, externalDataDirectory
+              $cordovaFile.writeFile(cordova.file.externalDataDirectory, fileName, Base64Binary.decodeArrayBuffer(data), true).then(function(writeResult){
                 console.log(writeResult);
                 var width = $scope.canvas.width;
                 var height = $scope.canvas.height;

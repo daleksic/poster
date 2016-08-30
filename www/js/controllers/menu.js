@@ -1,6 +1,6 @@
 angular.module('starter.menu', [])
 
-.controller('MenuCtrl', function($scope, $state, $ionicSideMenuDelegate, UtilsService, UserService) {
+.controller('MenuCtrl', function($scope, $state, $ionicSideMenuDelegate, $ionicHistory, UtilsService, UserService) {
 
   //$scope.user = {fullName: 'Dusko Aleksic', email:'dusko.@gmail.com'};
   $scope.user = {fullName: '', email:''};
@@ -15,6 +15,10 @@ angular.module('starter.menu', [])
     UtilsService.set('PosterActiveUser', '').then(function(response){
       $ionicSideMenuDelegate.toggleLeft();
       $state.go('login');
+      $timeout(function () {
+        $ionicHistory.clearCache();
+        $ionicHistory.clearHistory();
+    }, 300)
     });
   };
 

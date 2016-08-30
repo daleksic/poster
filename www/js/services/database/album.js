@@ -9,6 +9,7 @@ angular.module('starter.service.album', ['starter.database'])
     },
 
     deleteAlbum: function(albumId){
+      DatabaseService.findImagesByAlbumId(albumId);
       DatabaseService.deleteAlbum(albumId);
     },
 

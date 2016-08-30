@@ -106,12 +106,17 @@ angular.module('starter.albums', [])
         ImageService.findImagesByAlbumId($scope.selectedAlbumId).then(function(images){
             var files = [];
             files = images;
-            $scope.deleteFiles(files);
-            AlbumService.deleteAlbum($scope.selectedAlbumId);
-            $scope.albums.splice($scope.selectedAlbumIndex, 1);
-            $scope.hideActionSheet();
-            $cordovaToast.show('Album is deleted.', 'short', 'bottom');        
+            if(images.length > 0) {
+                $scope.deleteFiles(files);
+            }         
         });
+        AlbumService.deleteAlbum($scope.selectedAlbumId);
+        $scope.albums.splice($scope.selectedAlbumIndex, 1);
+        $scope.resetSelection();
+        $scope.hideActionSheet();
+        $cordovaToast.show('Album is deleted.', 'short', 'bottom');                  
+        
+        return true;
       }
     });
 
@@ -242,10 +247,17 @@ angular.module('starter.albums', [])
     $scope.deleteFiles = function(images){
         angular.forEach(images, function (image, key) {
             $cordovaFile.removeFile(cordova.file.externalDataDirectory, image.title + '.jpg').then(function(result){
-               ImageService.deleteImage(image.id);
+             //  ImageService.deleteImage(image.id);
                     
              });
         });
+        
+       /* for (var i=0; i < images.length; i++) {
+            $cordovaFile.removeFile(cordova.file.externalDataDirectory, images[i].title + '.jpg').then(function(result){
+               ImageService.deleteImage(images[i].id);
+                    
+             });       
+        }*/
     }
 
   $ionicPopover.fromTemplateUrl('templates/popover/input_popover.html', { //file:///android_asset/www/

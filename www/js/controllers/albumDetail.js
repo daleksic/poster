@@ -14,15 +14,8 @@ angular.module('starter.albumdetail', [])
 
   $scope.album = {};
   $scope.albumId = '';
-  $scope.images = [
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 1 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 2 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 3 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.halogendesigns.com%2Fblog%2Fwp-content%2Fuploads%2Fcover1.jpg&f=1",id: 4 },
-  { title: 'Nature', image: "https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pastemagazine.com%2Fblogs%2Flists%2F2009%2F11%2F15%2Fdangerdoom_mouse_mask.jpg&f=1",id: 5 }
-
-  ];
-
+  $scope.images = [];
+  
   $scope.$on('$ionicView.beforeEnter', function(){
     $scope.albumId = $stateParams.albumId;
     UtilsService.get('PosterTheme').then(function(value){
@@ -69,21 +62,20 @@ angular.module('starter.albumdetail', [])
         // add cancel code..
       },
      buttonClicked: function(index) {
-      /*  if(index == 0){
-          alert("Edit");
-        }
-        return true;*/
+   
       },
       destructiveButtonClicked : function(){
 
         ImageService.findImageById($scope.selectedImage).then(function(image){
-          $cordovaFile.removeFile(cordova.file.externalDataDirectory, image.title + '.jpg').then(function(result){
-            ImageService.deleteImage($scope.selectedImage);
-            $scope.album.images.splice($scope.selectedImageIndex, 1);
-            $scope.hideActionSheet();
-            $cordovaToast.show('Photo is deleted', 'short', 'bottom');
-          });
+            $cordovaFile.removeFile(cordova.file.externalDataDirectory, image.title + '.jpg').then(function(result){ 
+              console.log('image is removed.');
+           });
+           ImageService.deleteImage($scope.selectedImage);
+           $scope.album.images.splice($scope.selectedImageIndex, 1);
+           $scope.hideActionSheet();
+           $cordovaToast.show('Photo is deleted', 'short', 'bottom');
         });
+        return true;
       }
     });
 
